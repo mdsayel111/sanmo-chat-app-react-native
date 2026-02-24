@@ -1,8 +1,10 @@
 import { Feather, Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React from "react";
 import {
   FlatList,
   Image,
+  Pressable,
   StatusBar,
   StyleSheet,
   Text,
@@ -84,11 +86,17 @@ export default function HomeScreen() {
     return (
       <SwipeableItem
         item={item}
-        renderUnderlayRight={renderRightActions}
-        snapPointsRight={[120]}
-        overSwipe={0}
+        renderUnderlayLeft={renderRightActions}
+        snapPointsLeft={[100]}
+        overSwipe={30}
       >
-        <View style={styles.chatItem}>
+        <Pressable
+          onPress={() => {
+            console.log("click");
+            router.push(`/chat?id=${item.id}`);
+          }}
+          style={styles.chatItem}
+        >
           <View>
             <Image source={{ uri: item.avatar }} style={styles.avatar} />
             {item.online && <View style={styles.onlineDot} />}
@@ -109,7 +117,7 @@ export default function HomeScreen() {
               </View>
             )}
           </View>
-        </View>
+        </Pressable>
       </SwipeableItem>
     );
   };
@@ -216,12 +224,14 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingTop: 20,
-    paddingHorizontal: 15,
   },
   chatItem: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
+    backgroundColor: "#f3f3f3",
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    borderRadius: 15,
   },
   avatar: {
     width: 55,
@@ -267,20 +277,28 @@ const styles = StyleSheet.create({
   rightActions: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "flex-end",
     height: "100%",
+    gap: 5,
+    paddingHorizontal: 10,
   },
   bellButton: {
     backgroundColor: "#0f3d33",
-    width: 60,
+    width: 40,
+    height: 40,
+    borderRadius: "50%",
     justifyContent: "center",
     alignItems: "center",
   },
   deleteButton: {
     backgroundColor: "#FF3B30",
-    width: 60,
+    width: 40,
+    height: 40,
+    borderRadius: "50%",
     justifyContent: "center",
     alignItems: "center",
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
   },
 });
+

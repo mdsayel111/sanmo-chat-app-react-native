@@ -1,100 +1,95 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
+  Image,
   TouchableOpacity,
   StatusBar,
-  ListRenderItem,
 } from "react-native";
-import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
-
-type CallType = "incoming" | "outgoing" | "missed";
+import { Feather, Ionicons } from "@expo/vector-icons";
 
 interface CallItem {
   id: string;
   name: string;
+  avatar: string;
   time: string;
-  type: CallType;
+  type: "incoming" | "missed" | "outgoing";
 }
 
-const initialCalls: CallItem[] = [
+const DATA: CallItem[] = [
   {
     id: "1",
-    name: "Anamul",
-    time: "February 20, 4:23 PM",
+    name: "Team Align",
+    avatar: "https://i.pravatar.cc/150?img=1",
+    time: "Today, 09:30 AM",
     type: "incoming",
   },
   {
     id: "2",
-    name: "Mamun Vai Sanmo",
-    time: "February 20, 4:11 PM",
-    type: "outgoing",
+    name: "Jhon Abraham",
+    avatar: "https://i.pravatar.cc/150?img=2",
+    time: "Today, 07:30 AM",
+    type: "incoming",
   },
   {
     id: "3",
-    name: "Saidul Gazi Borishal",
-    time: "February 19, 10:50 AM",
+    name: "Sabila Sayma",
+    avatar: "https://i.pravatar.cc/150?img=3",
+    time: "Yesterday, 07:35 PM",
     type: "missed",
+  },
+  {
+    id: "4",
+    name: "Alex Linderson",
+    avatar: "https://i.pravatar.cc/150?img=4",
+    time: "Monday, 09:30 AM",
+    type: "outgoing",
+  },
+  {
+    id: "5",
+    name: "John Borino",
+    avatar: "https://i.pravatar.cc/150?img=5",
+    time: "Monday, 09:30 AM",
+    type: "incoming",
   },
 ];
 
-const CallsScreen: React.FC = () => {
-  const [calls, setCalls] = useState<CallItem[]>(initialCalls);
+const CallsScreen = () => {
+  const renderItem = ({ item }: { item: CallItem }) => {
+    const color =
+      item.type === "missed"
+        ? "#FF4D4F"
+        : item.type === "incoming"
+        ? "#1BA784"
+        : "#6C63FF";
 
-  const addFakeCall = () => {
-    const newCall: CallItem = {
-      id: Date.now().toString(),
-      name: "New Contact",
-      time: new Date().toLocaleString(),
-      type: "outgoing",
-    };
-
-    setCalls((prev) => [newCall, ...prev]);
-  };
-
-  const renderItem: ListRenderItem<CallItem> = ({ item }) => {
-    const iconColor =
-      item.type === "missed" ? "#ff4d4d" : "#25D366";
-
-    const iconName =
+    const icon =
       item.type === "incoming"
-        ? "call-received"
-        : item.type === "outgoing"
-        ? "call-made"
-        : "call-received";
+        ? "phone-incoming"
+        : item.type === "missed"
+        ? "phone-missed"
+        : "phone-outgoing";
 
     return (
-      <TouchableOpacity style={styles.callItem}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
-            {item.name.charAt(0)}
-          </Text>
-        </View>
+      <View style={styles.row}>
+        <Image source={{ uri: item.avatar }} style={styles.avatar} />
 
         <View style={{ flex: 1 }}>
-          <Text
-            style={[
-              styles.name,
-              item.type === "missed" && { color: "#ff4d4d" },
-            ]}
-          >
-            {item.name}
-          </Text>
+          <Text style={styles.name}>{item.name}</Text>
 
-          <View style={styles.row}>
-            <MaterialIcons
-              name={iconName}
-              size={16}
-              color={iconColor}
-            />
-            <Text style={styles.time}> {item.time}</Text>
+          <View style={styles.subtitleRow}>
+            <Feather name={icon as any} size={14} color={color} />
+            <Text style={styles.time}>{item.time}</Text>
           </View>
         </View>
 
-        <Ionicons name="call-outline" size={22} color="#ccc" />
-      </TouchableOpacity>
+        <View style={styles.actions}>
+          <Feather name="phone" size={20} color="#9AA0A6" />
+          <Feather name="video" size={20} color="#9AA0A6" />
+        </View>
+      </View>
     );
   };
 
@@ -104,43 +99,29 @@ const CallsScreen: React.FC = () => {
 
       {/* Header */}
       <View style={styles.header}>
+        <TouchableOpacity style={styles.circleBtn}>
+          <Feather name="search" size={20} color="#fff" />
+        </TouchableOpacity>
+
         <Text style={styles.title}>Calls</Text>
-        <View style={styles.headerIcons}>
-          <Ionicons name="search" size={22} color="#fff" />
-          <Feather name="more-vertical" size={22} color="#fff" />
-        </View>
+
+        <TouchableOpacity style={styles.circleBtn}>
+          <Ionicons name="call-outline" size={20} color="#fff" />
+        </TouchableOpacity>
       </View>
 
-      {/* Top Actions */}
-      <View style={styles.actionsContainer}>
-        {[
-          { icon: "call-outline", label: "Call" },
-          { icon: "calendar-outline", label: "Schedule" },
-          { icon: "keypad-outline", label: "Keypad" },
-          { icon: "heart-outline", label: "Favorites" },
-        ].map((item, index) => (
-          <TouchableOpacity key={index} style={styles.actionItem}>
-            <View style={styles.actionCircle}>
-              <Ionicons name={item.icon as any} size={24} color="#fff" />
-            </View>
-            <Text style={styles.actionText}>{item.label}</Text>
-          </TouchableOpacity>
-        ))}
+      {/* Sheet */}
+      <View style={styles.sheet}>
+        <View style={styles.dragIndicator} />
+        <Text style={styles.sectionTitle}>Recent</Text>
+
+        <FlatList
+          data={DATA}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
       </View>
-
-      <Text style={styles.recentTitle}>Recent</Text>
-
-      <FlatList
-        data={calls}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        showsVerticalScrollIndicator={false}
-      />
-
-      {/* Floating Action Button */}
-      <TouchableOpacity style={styles.fab} onPress={addFakeCall}>
-        <Ionicons name="call" size={24} color="#fff" />
-      </TouchableOpacity>
     </View>
   );
 };
@@ -150,94 +131,96 @@ export default CallsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0b141a",
-    paddingTop: 50,
+    backgroundColor: "#062E26",
   },
+
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
-    marginBottom: 20,
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 60,
+    paddingBottom: 20,
   },
+
   title: {
-    fontSize: 26,
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  headerIcons: {
-    flexDirection: "row",
-    gap: 20,
-  },
-  actionsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 25,
-  },
-  actionItem: {
-    alignItems: "center",
-  },
-  actionCircle: {
-    backgroundColor: "#1f2c34",
-    width: 65,
-    height: 65,
-    borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  actionText: {
-    color: "#ccc",
-    marginTop: 8,
-    fontSize: 13,
-  },
-  recentTitle: {
     color: "#fff",
     fontSize: 20,
     fontWeight: "600",
-    paddingHorizontal: 16,
-    marginBottom: 10,
   },
-  callItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: "#2a3942",
+
+  circleBtn: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    borderWidth: 1,
+    borderColor: "#ffffff40",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 12,
   },
-  avatarText: {
-    color: "#fff",
-    fontSize: 18,
+
+  sheet: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 16,
+    paddingTop: 10,
   },
-  name: {
-    color: "#fff",
+
+  dragIndicator: {
+    alignSelf: "center",
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "#E0E0E0",
+    marginBottom: 12,
+  },
+
+  sectionTitle: {
     fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 10,
   },
+
   row: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 4,
+    paddingVertical: 14,
   },
-  time: {
-    color: "#aaa",
-    fontSize: 13,
+
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 12,
   },
-  fab: {
-    position: "absolute",
-    bottom: 30,
-    right: 20,
-    backgroundColor: "#25D366",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: "center",
+
+  name: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+
+  subtitleRow: {
+    flexDirection: "row",
     alignItems: "center",
-    elevation: 5,
+    marginTop: 4,
+    gap: 6,
+  },
+
+  time: {
+    fontSize: 13,
+    color: "#888",
+    marginLeft: 6,
+  },
+
+  actions: {
+    flexDirection: "row",
+    gap: 16,
+  },
+
+  separator: {
+    height: 1,
+    backgroundColor: "#F0F0F0",
   },
 });
