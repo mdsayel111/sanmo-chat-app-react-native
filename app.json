@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "sanmo-chat-app-react-native",
+    "name": "Sanmo Chat",
     "slug": "sanmo-chat-app-react-native",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/app-icon.png",
     "scheme": "sanmochatappreactnative",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -19,7 +19,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.sayel111.sanmochatappreactnative"
     },
     "web": {
       "output": "static",
@@ -30,12 +31,12 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/splash-screen-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#ffffff"
           }
         }
       ]
@@ -43,6 +44,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "7263070d-5855-49cb-a6c0-2e24eea57a14"
+      }
     }
   }
 }
