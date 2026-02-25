@@ -1,3 +1,4 @@
+import { withAuth } from "@/HOF/auth-provider";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
@@ -67,7 +68,7 @@ const chats: Chat[] = [
   },
 ];
 
-export default function HomeScreen() {
+function HomeScreen() {
   const renderRightActions = () => {
     return (
       <View style={styles.rightActions}>
@@ -173,6 +174,8 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
+
+export default withAuth(HomeScreen);
 
 
 
