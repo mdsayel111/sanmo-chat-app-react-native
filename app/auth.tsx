@@ -1,5 +1,5 @@
 import { useAuthAxios } from "@/hooks/use-auth-axios";
-import { AxiosError } from "axios";
+import globalStyles from "@/styles";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
@@ -17,10 +17,15 @@ export default function Auth() {
     const axios = useAuthAxios();
 
     const sendOtp = async () => {
+        if(!phone || phone.length !== 11) {
+            Alert.alert("Invalid phone number");
+            return;
+        }
         try {
-            await axios.post("/auth/get-otp", {
+            const res =await axios.post("/auth/get-otp", {
                 phone,
             });
+            console.log(res.data)
             router.push({
                 pathname: "/verify-otp",
                 params: { phone },
@@ -44,7 +49,13 @@ export default function Auth() {
                 onChangeText={setPhone}
             />
 
-            <TouchableOpacity style={styles.button} onPress={sendOtp}>
+            <TouchableOpacity 
+             style={[
+    styles.button,
+    (!phone || phone.length !== 11) && globalStyles.buttonDisabled
+  ]}
+            onPress={sendOtp} 
+            disabled={!phone || phone.length !== 11}> 
                 <Text style={styles.buttonText}>Send OTP</Text>
             </TouchableOpacity>
         </SafeAreaView>

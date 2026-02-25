@@ -1,18 +1,23 @@
+import { useAuth } from "@/context/auth-context";
+import { useAuthAxios } from "@/hooks/use-auth-axios";
+import globalStyles from "@/styles";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
-  View,
+  Alert,
+  StyleSheet,
   Text,
   TextInput,
-  StyleSheet,
   TouchableOpacity,
-  Alert,
+  View,
 } from "react-native";
 
 export default function VerifyOtp() {
   const { phone } = useLocalSearchParams<{ phone: string }>();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(60);
+  const axios = useAuthAxios();
+  const {setAuthContext, auth} = useAuth();
 
   const inputs = useRef<TextInput[]>([]);
 
@@ -30,24 +35,48 @@ export default function VerifyOtp() {
     if (text && index < 5) inputs.current[index + 1]?.focus();
   };
 
-  const verifyOtp = async () => {
-    const code = otp.join("");
+const verifyOtp = async () => {
+  const code = otp.join("");
 
-    if (code.length !== 4) {
-      Alert.alert("Enter full OTP");
-      return;
+  if (code.length !== 6) {
+    Alert.alert("Enter full OTP");
+    return;
+  }
+
+  try {
+    const res = await axios.post("/auth/verify-otp", {
+      phone,
+      otp: code,
+    });
+
+    const user = res.data?.data?.user;
+
+    setAuthContext({
+      token: res.data?.data.token,
+      user: user,
+    });
+
+    const isNewUser =
+      new Date(user.createdAt).getTime() ===
+      new Date(user.updatedAt).getTime();
+
+    if (isNewUser) {
+      router.push({
+        pathname: "/(tabs)/profile-update"
+      });
+    } else {
+      router.push({
+        pathname: "/(tabs)"
+      });
     }
 
-    // 🔥 Mock verification
-    await new Promise((r) => setTimeout(r, 800));
-
-    Alert.alert("Success", "Account created 🎉");
-
-    router.replace("/(tabs)");
-  };
+  } catch (error: any) {
+    Alert.alert(error.response?.data?.message);
+  }
+};
 
   const resendOtp = () => {
-    setTimer(30);
+    setTimer(60);
   };
 
   return (
@@ -71,7 +100,7 @@ export default function VerifyOtp() {
         ))}
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={verifyOtp}>
+      <TouchableOpacity style={[styles.button, otp.join("").length !== 6 && globalStyles.buttonDisabled]} onPress={verifyOtp} disabled={otp.join("").length !== 6}>
         <Text style={styles.buttonText}>Verify</Text>
       </TouchableOpacity>
 

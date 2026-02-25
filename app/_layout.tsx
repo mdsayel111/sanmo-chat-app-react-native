@@ -4,13 +4,17 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { AuthProvider } from '@/context/auth-context';
+import { AuthProvider, useAuth } from '@/context/auth-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState } from 'react';
 
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
 export default function RootLayout() {
+  const [guard, setGuard] = useState(false);
+  // const { auth } = AsyncStorage.getItem("auth");
   return (
     <AuthProvider>
       <ThemeProvider value={DefaultTheme} >
@@ -20,9 +24,9 @@ export default function RootLayout() {
               headerShown: false,
             }}
           >
-            <Stack.Protected guard={false}>
+            {/* <Stack.Protected guard={auth?.token ? true : false}> */}
               <Stack.Screen name="(tabs)" />
-            </Stack.Protected>
+            {/* </Stack.Protected> */}
             <Stack.Screen name="auth" />
             <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
           </Stack>

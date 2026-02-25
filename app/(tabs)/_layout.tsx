@@ -1,4 +1,4 @@
-import { Tabs, usePathname } from "expo-router";
+import { Redirect, Tabs, usePathname } from "expo-router";
 import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
@@ -9,15 +9,24 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useAuth } from "@/context/auth-context";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const pathname = usePathname();
+    const { auth, loading } = useAuth();
 
   const hideRoutes = ["/chat", "/chat/[id]", "/auth"];
   const shouldHideTab = hideRoutes.some(route =>
     pathname.startsWith(route.replace("[id]", ""))
   );
+
+  if(loading) {
+  return <></>
+}
+    if (!auth?.token) {
+    return <Redirect href="/auth" />;
+  }
 
   return (
     <>
