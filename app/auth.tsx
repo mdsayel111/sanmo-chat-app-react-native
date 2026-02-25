@@ -1,35 +1,38 @@
+import { useAuthAxios } from "@/hooks/use-auth-axios";
+import { AxiosError } from "axios";
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
-    View,
+    Alert,
+    StyleSheet,
     Text,
     TextInput,
-    StyleSheet,
-    TouchableOpacity,
-    Alert,
+    TouchableOpacity
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Auth() {
     const [phone, setPhone] = useState("");
+    const axios = useAuthAxios();
 
     const sendOtp = async () => {
-        if (phone.length < 10) {
-            Alert.alert("Invalid number");
-            return;
+        try {
+            await axios.post("/auth/get-otp", {
+                phone,
+            });
+            router.push({
+                pathname: "/verify-otp",
+                params: { phone },
+            });
+        } catch (error: any) {
+            Alert.alert(error.response?.data?.message);
         }
-
-        // 🔥 Mock API call
-        await new Promise((r) => setTimeout(r, 800));
-
-        router.push({
-            pathname: "/verify-otp",
-            params: { phone },
-        });
     };
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar backgroundColor="#0f3d33"/>
             <Text style={styles.title}>Login Account</Text>
             <Text style={styles.subtitle}>Enter your phone number</Text>
 

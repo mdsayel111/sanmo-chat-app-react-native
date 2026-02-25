@@ -8,6 +8,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -56,6 +57,7 @@ export default function TabLayout() {
           <TabItem icon="settings-outline" label="Settings" navigateTo="/settings" size={25} />
         </View>
       )}
+      <StatusBar style="auto" />
     </>
   );
 }
