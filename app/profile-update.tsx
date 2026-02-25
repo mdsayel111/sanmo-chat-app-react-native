@@ -1,14 +1,15 @@
 import DraggableSheet from "@/components/shared/dragable-sheet";
+import ImageInput from "@/components/ui/image-input";
 import globalStyles from "@/styles";
+import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
-  View,
+  StatusBar,
+  StyleSheet,
   Text,
   TextInput,
-  StyleSheet,
   TouchableOpacity,
-  ScrollView,
-  StatusBar,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -17,6 +18,7 @@ export default function ProfileUpdateScreen() {
   const [emergencyContact, setEmergencyContact] = useState("");
   const [designation, setDesignation] = useState("");
   const [address, setAddress] = useState("");
+  const [image, setImage] = useState<string | ImagePicker.ImagePickerAsset | null>(null);
 
   const handleUpdate = () => {
     console.log({
@@ -40,14 +42,29 @@ export default function ProfileUpdateScreen() {
       <DraggableSheet>
         <View style={{flex:1}}>
          <View style={{flex:1}}>
+          {/* image */}
+          <ImageInput
+            image={image}
+            onChange={(image) => setImage(image)}
+          />
            {/* Name */}
-          <Text style={styles.label}>Full Name</Text>
+          <Text style={styles.label}>Name</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter your name"
             placeholderTextColor="#999"
             value={name}
             onChangeText={setName}
+          />
+          
+          {/* Designation */}
+          <Text style={styles.label}>Designation</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your designation"
+            placeholderTextColor="#999"
+            value={designation}
+            onChangeText={setDesignation}
           />
 
           {/* Emergency Contact */}
@@ -61,15 +78,6 @@ export default function ProfileUpdateScreen() {
             onChangeText={setEmergencyContact}
           />
 
-          {/* Designation */}
-          <Text style={styles.label}>Designation</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your designation"
-            placeholderTextColor="#999"
-            value={designation}
-            onChangeText={setDesignation}
-          />
 
           {/* Address */}
           <Text style={styles.label}>Address</Text>
