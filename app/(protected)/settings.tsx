@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/auth-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
 import React from "react";
@@ -33,6 +34,14 @@ const SettingItem = ({ icon, title, subtitle, href }: SettingItemProps) => (
 );
 
 const SettingsScreen = () => {
+    const { removeAuthContext } = useAuth();
+
+    const logOut = async () => {
+        await removeAuthContext();
+        router.push({
+            pathname: "/auth",
+        });
+    };
     return (
         <View style={styles.container}>
             <StatusBar barStyle="light-content" />
@@ -106,6 +115,18 @@ const SettingsScreen = () => {
                     title="Invite a friend"
                     subtitle=""
                 />
+
+                <Pressable style={styles.logOutButton} onPress={logOut}>
+                    <Text
+                        style={{
+                            color: "white",
+                            textAlign: "center",
+                            fontWeight: "600",
+                        }}
+                    >
+                        Log Out
+                    </Text>
+                </Pressable>
             </View>
         </View>
     );
@@ -207,5 +228,11 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: "#888",
         marginTop: 2,
+    },
+    logOutButton: {
+        backgroundColor: "red",
+        padding: 16,
+        borderRadius: 12,
+        marginTop: 20,
     },
 });

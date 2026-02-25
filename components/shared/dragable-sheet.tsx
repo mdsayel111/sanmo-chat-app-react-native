@@ -142,7 +142,8 @@ export default function DraggableSheet({
     return (
         <View style={styles.sheet}>
             <View style={styles.dragIndicator} />
-            <ScrollView showsVerticalScrollIndicator={false}>{children}</ScrollView>
+            {children}
+            
         </View>
     );
 }

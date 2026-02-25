@@ -6,6 +6,7 @@ import {
     Image,
     TouchableOpacity,
     StatusBar,
+    ScrollView,
 } from "react-native";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import DraggableSheet from "@/components/shared/dragable-sheet";
@@ -59,6 +60,8 @@ export default function UserProfileScreen() {
             </View>
             
             <DraggableSheet>
+                <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
+                                   
                 <InfoRow label="Display Name" value="Jhon Abraham" />
                 <InfoRow
                     label="Email Address"
@@ -95,6 +98,7 @@ export default function UserProfileScreen() {
                         </View>
                     </View>
                 </View>
+                </ScrollView>
             </DraggableSheet>
         </View>
     );

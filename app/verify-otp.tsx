@@ -62,11 +62,11 @@ const verifyOtp = async () => {
 
     if (isNewUser) {
       router.push({
-        pathname: "/(tabs)/profile-update"
+        pathname: "/profile-update"
       });
     } else {
       router.push({
-        pathname: "/(tabs)"
+        pathname: "/(protected)"
       });
     }
 

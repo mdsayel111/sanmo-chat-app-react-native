@@ -1,4 +1,4 @@
-import { Redirect, Tabs, usePathname } from "expo-router";
+import { Link, Redirect, router, Tabs, usePathname } from "expo-router";
 import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
@@ -16,7 +16,7 @@ export default function TabLayout() {
   const pathname = usePathname();
     const { auth, loading } = useAuth();
 
-  const hideRoutes = ["/chat", "/chat/[id]", "/auth"];
+  const hideRoutes = ["/chat", "/chat/[id]", "/auth", "/profile-update", "/verify-otp"];
   const shouldHideTab = hideRoutes.some(route =>
     pathname.startsWith(route.replace("[id]", ""))
   );
@@ -27,6 +27,15 @@ export default function TabLayout() {
     if (!auth?.token) {
     return <Redirect href="/auth" />;
   }
+
+  
+      const isNewUser =
+        new Date(auth?.user.createdAt).getTime() ===
+        new Date(auth?.user.updatedAt).getTime();
+  console.log(isNewUser)
+      if (isNewUser) {
+        return <Redirect href={"/profile-update"}/>
+      } 
 
   return (
     <>
@@ -86,6 +95,7 @@ const TabItem = ({
   const isActive = pathname === navigateTo;
 
   return (
+        <Link href={navigateTo as any} asChild>
     <TouchableOpacity activeOpacity={0.7}>
       <View style={{ alignItems: "center", height: 45 }}>
         <Ionicons
@@ -103,6 +113,7 @@ const TabItem = ({
         </Text>
       </View>
     </TouchableOpacity>
+        </Link>
   );
 };
 
