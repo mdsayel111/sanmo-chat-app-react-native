@@ -125,7 +125,6 @@ function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <StatusBar barStyle="light-content" />
 
       {/* Header */}
       <View style={styles.header}>

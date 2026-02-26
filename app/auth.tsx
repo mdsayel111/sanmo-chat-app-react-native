@@ -37,7 +37,6 @@ export default function Auth() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar backgroundColor="#0f3d33"/>
             <Text style={styles.title}>Login Account</Text>
             <Text style={styles.subtitle}>Enter your phone number</Text>
 

@@ -1,9 +1,11 @@
 import DraggableSheet from "@/components/shared/dragable-sheet";
 import ImageInput from "@/components/ui/image-input";
+import { useAuthAxios } from "@/hooks/use-auth-axios";
 import globalStyles from "@/styles";
 import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
+  Alert,
   StatusBar,
   StyleSheet,
   Text,
@@ -20,8 +22,27 @@ export default function ProfileUpdateScreen() {
   const [address, setAddress] = useState("");
   const [image, setImage] = useState<string | ImagePicker.ImagePickerAsset | null>(null);
 
-  const handleUpdate = () => {
+  const axios = useAuthAxios();
+
+  const handleUpdate = async () => {
+    if (!image || !name || !emergencyContact || !designation || !address) {
+      return Alert.alert("Error", "Please fill in all fields.");
+    }
+
+    try {
+      const res = await axios.post("/user/profile-update", {
+        name,
+        emergencyContact,
+        designation,
+        address,
+        image,
+      });
+    } catch (error: any) {
+      Alert.alert("Error", error.response?.data?.message);
+    }
+
     console.log({
+      image,
       name,
       emergencyContact,
       designation,
@@ -31,8 +52,7 @@ export default function ProfileUpdateScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      
+
       {/* Dark Header */}
       <View style={styles.header}>
         <Text style={globalStyles.pageHeader}>Update Profile</Text>
@@ -40,57 +60,57 @@ export default function ProfileUpdateScreen() {
 
       {/* White Card Form */}
       <DraggableSheet>
-        <View style={{flex:1}}>
-         <View style={{flex:1}}>
-          {/* image */}
-          <ImageInput
-            image={image}
-            onChange={(image) => setImage(image)}
-          />
-           {/* Name */}
-          <Text style={styles.label}>Name</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your name"
-            placeholderTextColor="#999"
-            value={name}
-            onChangeText={setName}
-          />
-          
-          {/* Designation */}
-          <Text style={styles.label}>Designation</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your designation"
-            placeholderTextColor="#999"
-            value={designation}
-            onChangeText={setDesignation}
-          />
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 1 }}>
+            {/* image */}
+            <ImageInput
+              image={image}
+              onChange={(image) => setImage(image)}
+            />
+            {/* Name */}
+            <Text style={styles.label}>Name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your name"
+              placeholderTextColor="#999"
+              value={name}
+              onChangeText={setName}
+            />
 
-          {/* Emergency Contact */}
-          <Text style={styles.label}>Emergency Contact</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter emergency contact number"
-            placeholderTextColor="#999"
-            keyboardType="phone-pad"
-            value={emergencyContact}
-            onChangeText={setEmergencyContact}
-          />
+            {/* Designation */}
+            <Text style={styles.label}>Designation</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your designation"
+              placeholderTextColor="#999"
+              value={designation}
+              onChangeText={setDesignation}
+            />
+
+            {/* Emergency Contact */}
+            <Text style={styles.label}>Emergency Contact</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter emergency contact number"
+              placeholderTextColor="#999"
+              keyboardType="phone-pad"
+              value={emergencyContact}
+              onChangeText={setEmergencyContact}
+            />
 
 
-          {/* Address */}
-          <Text style={styles.label}>Address</Text>
-          <TextInput
-            style={[styles.input, styles.multilineInput]}
-            placeholder="Enter your address"
-            placeholderTextColor="#999"
-            multiline
-            numberOfLines={4}
-            value={address}
-            onChangeText={setAddress}
-          />
-         </View>
+            {/* Address */}
+            <Text style={styles.label}>Address</Text>
+            <TextInput
+              style={[styles.input, styles.multilineInput]}
+              placeholder="Enter your address"
+              placeholderTextColor="#999"
+              multiline
+              numberOfLines={4}
+              value={address}
+              onChangeText={setAddress}
+            />
+          </View>
 
           {/* Update Button */}
           <TouchableOpacity style={styles.button} onPress={handleUpdate}>

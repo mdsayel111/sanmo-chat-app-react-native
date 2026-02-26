@@ -63,7 +63,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
   const source = getImageSource();
 
   return (
-    <TouchableOpacity onPress={pickImage} activeOpacity={0.8}>
+    <TouchableOpacity onPress={pickImage} activeOpacity={0.8} style={{width: size, height: size}}>
       <View
         style={[
           styles.container,

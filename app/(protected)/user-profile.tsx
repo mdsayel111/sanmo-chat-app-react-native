@@ -31,7 +31,6 @@ const ActionBtn = ({
 export default function UserProfileScreen() {
     return (
         <View style={styles.container}>
-            <StatusBar barStyle="light-content" />
 
             {/* Header */}
             <View style={styles.header}>

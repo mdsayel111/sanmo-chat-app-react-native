@@ -3,10 +3,9 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { AuthProvider, useAuth } from '@/context/auth-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthProvider } from '@/context/auth-context';
 import { useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export const unstable_settings = {
   anchor: '(protected)',
@@ -17,6 +16,7 @@ export default function RootLayout() {
   // const { auth } = AsyncStorage.getItem("auth");
   return (
     <AuthProvider>
+      <StatusBar style="light" backgroundColor="#0f3d33" />
       <ThemeProvider value={DefaultTheme} >
         <GestureHandlerRootView>
           <Stack
@@ -25,7 +25,7 @@ export default function RootLayout() {
             }}
           >
             {/* <Stack.Protected guard={auth?.token ? true : false}> */}
-              <Stack.Screen name="(protected)" />
+            <Stack.Screen name="(protected)" />
             {/* </Stack.Protected> */}
             <Stack.Screen name="auth" />
             <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />

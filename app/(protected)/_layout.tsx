@@ -75,7 +75,6 @@ export default function TabLayout() {
           <TabItem icon="settings-outline" label="Settings" navigateTo="/settings" size={25} />
         </View>
       )}
-      <StatusBar style="auto" />
     </>
   );
 }
