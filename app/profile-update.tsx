@@ -1,40 +1,45 @@
 import DraggableSheet from "@/components/shared/dragable-sheet";
+import Button from "@/components/ui/button";
 import ImageInput from "@/components/ui/image-input";
+import TextInput from "@/components/ui/text-input";
 import { useAuth } from "@/context/auth-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import globalStyles from "@/styles";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
-  StatusBar,
   StyleSheet,
   Text,
-  TextInput,
-  TouchableOpacity,
   View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileUpdateScreen() {
   const [name, setName] = useState("");
-  const [emergencyContact, setEmergencyContact] = useState("");
+  const [emergencyContactPhone, setEmergencyContactPhone] = useState("");
+  const [emergencyContactRelation, setEmergencyContactRelation] = useState("");
+  const [emergencyContactName, setEmergencyContactName] = useState("");
   const [designation, setDesignation] = useState("");
   const [address, setAddress] = useState("");
   const [image, setImage] = useState<string | ImagePicker.ImagePickerAsset | null>(null);
   const { auth, setAuthContext } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const axios = useAuthAxios();
+
   const handleUpdate = async () => {
-    if (!image || !name || !emergencyContact || !designation || !address) {
+    if (!image || !name || !emergencyContactPhone || !emergencyContactRelation || !emergencyContactName || !designation || !address) {
       return Alert.alert("Error", "Please fill in all fields.");
     }
-
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
-      formData.append("emergencyContact", emergencyContact);
+      formData.append("emergencyContactPhone", emergencyContactPhone);
+      formData.append("emergencyContactRelation", emergencyContactRelation);
+      formData.append("emergencyContactName", emergencyContactName);
       formData.append("designation", designation);
       formData.append("address", address);
       if (image && typeof image !== "string") {
@@ -59,7 +64,12 @@ export default function ProfileUpdateScreen() {
     } catch (error: any) {
       Alert.alert("Error", error.response?.data?.message);
     }
+
+    setLoading(false);
   };
+
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -78,55 +88,33 @@ export default function ProfileUpdateScreen() {
               image={image}
               onChange={(image) => setImage(image)}
             />
-            {/* Name */}
-            <Text style={styles.label}>Name</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your name"
-              placeholderTextColor="#999"
-              value={name}
-              onChangeText={setName}
-            />
 
-            {/* Designation */}
-            <Text style={styles.label}>Designation</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your designation"
-              placeholderTextColor="#999"
-              value={designation}
-              onChangeText={setDesignation}
-            />
+            <Text style={{
+              fontSize: 20,
+              fontWeight: "900",
+              marginTop: 20,
+            }}>Personal Info :</Text>
 
-            {/* Emergency Contact */}
-            <Text style={styles.label}>Emergency Contact</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter emergency contact number"
-              placeholderTextColor="#999"
-              keyboardType="phone-pad"
-              value={emergencyContact}
-              onChangeText={setEmergencyContact}
-            />
+            <TextInput value={name} onChangeText={(text) => setName(text)} placeholder="Enter your name" label="Name" />
+            <TextInput value={designation} onChangeText={(text) => setDesignation(text)} placeholder="Enter your designation" label="Designation" />
+            <TextInput value={address} onChangeText={(text) => setAddress(text)} placeholder="Enter your address" label="Address" multiline />
 
+            <Text style={{
+              fontSize: 20,
+              fontWeight: "900",
+              marginTop: 20,
+            }}>Emergency Contact :</Text>
 
-            {/* Address */}
-            <Text style={styles.label}>Address</Text>
-            <TextInput
-              style={[styles.input, styles.multilineInput]}
-              placeholder="Enter your address"
-              placeholderTextColor="#999"
-              multiline
-              numberOfLines={4}
-              value={address}
-              onChangeText={setAddress}
-            />
+            <TextInput value={emergencyContactName} onChangeText={(text) => setEmergencyContactName(text)} placeholder="Enter name" label="Name" />
+            <TextInput value={emergencyContactPhone} onChangeText={(text) => {
+              if (text.length < 11) {
+                setEmergencyContactPhone(text);
+              }
+            }} placeholder="Enter phone number" keyboardType="phone-pad" label="Phone Number" />
+            <TextInput value={emergencyContactRelation} onChangeText={(text) => setEmergencyContactRelation(text)} placeholder="Enter relation" label="Relation" />
           </View>
 
-          {/* Update Button */}
-          <TouchableOpacity style={styles.button} onPress={handleUpdate}>
-            <Text style={styles.buttonText}>Update Profile</Text>
-          </TouchableOpacity>
+          <Button text="Update Profile" onPress={handleUpdate} containerStyles={{ paddingBottom: 20 }} loading={loading} disabled={loading} />
         </View>
 
       </DraggableSheet>

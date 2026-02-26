@@ -1,6 +1,6 @@
+import Button from "@/components/ui/button";
 import { useAuth } from "@/context/auth-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
-import globalStyles from "@/styles";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -17,7 +17,9 @@ export default function VerifyOtp() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(60);
   const axios = useAuthAxios();
-  const {setAuthContext, auth} = useAuth();
+  const { setAuthContext, auth } = useAuth();
+
+  const [loading, setLoading] = useState(false);
 
   const inputs = useRef<TextInput[]>([]);
 
@@ -35,45 +37,48 @@ export default function VerifyOtp() {
     if (text && index < 5) inputs.current[index + 1]?.focus();
   };
 
-const verifyOtp = async () => {
-  const code = otp.join("");
+  const verifyOtp = async () => {
+    const code = otp.join("");
 
-  if (code.length !== 6) {
-    Alert.alert("Enter full OTP");
-    return;
-  }
-
-  try {
-    const res = await axios.post("/auth/verify-otp", {
-      phone,
-      otp: code,
-    });
-
-    const user = res.data?.data?.user;
-
-    setAuthContext({
-      token: res.data?.data.token,
-      user: user,
-    });
-
-    const isNewUser =
-      new Date(user.createdAt).getTime() ===
-      new Date(user.updatedAt).getTime();
-
-    if (isNewUser) {
-      router.push({
-        pathname: "/profile-update"
-      });
-    } else {
-      router.push({
-        pathname: "/(protected)"
-      });
+    if (code.length !== 6) {
+      Alert.alert("Enter full OTP");
+      return;
     }
 
-  } catch (error: any) {
-    Alert.alert(error.response?.data?.message);
-  }
-};
+    setLoading(true);
+    try {
+      const res = await axios.post("/auth/verify-otp", {
+        phone,
+        otp: code,
+      });
+
+      const user = res.data?.data?.user;
+
+      setAuthContext({
+        token: res.data?.data.token,
+        user: user,
+      });
+
+      const isNewUser =
+        new Date(user.createdAt).getTime() ===
+        new Date(user.updatedAt).getTime();
+
+      if (isNewUser) {
+        router.push({
+          pathname: "/profile-update"
+        });
+      } else {
+        router.push({
+          pathname: "/(protected)"
+        });
+      }
+
+    } catch (error: any) {
+      Alert.alert(error.response?.data?.message);
+    }
+
+    setLoading(false);
+  };
 
   const resendOtp = () => {
     setTimer(60);
@@ -100,9 +105,7 @@ const verifyOtp = async () => {
         ))}
       </View>
 
-      <TouchableOpacity style={[styles.button, otp.join("").length !== 6 && globalStyles.buttonDisabled]} onPress={verifyOtp} disabled={otp.join("").length !== 6}>
-        <Text style={styles.buttonText}>Verify</Text>
-      </TouchableOpacity>
+      <Button text="Verify" onPress={verifyOtp} loading={loading} />
 
       <TouchableOpacity
         disabled={timer > 0}

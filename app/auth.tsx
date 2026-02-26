@@ -1,7 +1,7 @@
+import Button from "@/components/ui/button";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import globalStyles from "@/styles";
 import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
     Alert,
@@ -14,15 +14,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Auth() {
     const [phone, setPhone] = useState("");
+    const [loading, setLoading] = useState(false);
     const axios = useAuthAxios();
 
     const sendOtp = async () => {
-        if(!phone || phone.length !== 11) {
+        if (!phone || phone.length !== 11) {
             Alert.alert("Invalid phone number");
             return;
         }
+        setLoading(true);
         try {
-            const res =await axios.post("/auth/get-otp", {
+            const res = await axios.post("/auth/get-otp", {
                 phone,
             });
             console.log(res.data)
@@ -33,6 +35,7 @@ export default function Auth() {
         } catch (error: any) {
             Alert.alert(error.response?.data?.message);
         }
+        setLoading(false);
     };
 
     return (
@@ -45,18 +48,13 @@ export default function Auth() {
                 keyboardType="phone-pad"
                 style={styles.input}
                 value={phone}
-                onChangeText={setPhone}
+                onChangeText={(text) => {
+                    if (text.length <= 11) {
+                        setPhone(text);
+                    }
+                }}
             />
-
-            <TouchableOpacity 
-             style={[
-    styles.button,
-    (!phone || phone.length !== 11) && globalStyles.buttonDisabled
-  ]}
-            onPress={sendOtp} 
-            disabled={!phone || phone.length !== 11}> 
-                <Text style={styles.buttonText}>Send OTP</Text>
-            </TouchableOpacity>
+            <Button text="Send OTP" onPress={sendOtp} loading={loading} />
         </SafeAreaView>
     );
 }

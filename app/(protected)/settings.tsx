@@ -38,9 +38,6 @@ const SettingsScreen = () => {
 
     const logOut = async () => {
         await removeAuthContext();
-        router.push({
-            pathname: "/auth",
-        });
     };
     return (
         <View style={styles.container}>
@@ -80,9 +77,9 @@ const SettingsScreen = () => {
                 {/* Settings Items */}
                 <SettingItem
                     icon="key"
-                    title="Account"
-                    subtitle="Privacy, security, change number"
-                    href={"/user-profile"}
+                    title="Edit Profile"
+                    subtitle="Change your name, phone number, profile picture"
+                    href={"/my-profile"}
                 />
 
                 <SettingItem

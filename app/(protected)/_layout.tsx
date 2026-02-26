@@ -121,5 +121,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     paddingVertical: 12,
     backgroundColor: "white",
+    borderTopColor: "#F0F0F0",
+    borderTopWidth: 1,
   },
 });

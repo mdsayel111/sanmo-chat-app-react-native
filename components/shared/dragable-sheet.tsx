@@ -143,7 +143,6 @@ export default function DraggableSheet({
         <View style={styles.sheet}>
             <View style={styles.dragIndicator} />
             {children}
-            
         </View>
     );
 }
