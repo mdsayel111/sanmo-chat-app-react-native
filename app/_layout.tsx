@@ -12,8 +12,6 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
-  const [guard, setGuard] = useState(false);
-  // const { auth } = AsyncStorage.getItem("auth");
   return (
     <AuthProvider>
       <StatusBar style="light" backgroundColor="#0f3d33" />

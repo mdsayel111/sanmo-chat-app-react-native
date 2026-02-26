@@ -5,19 +5,22 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Text,
   ImageSourcePropType,
   StyleProp,
   ViewStyle,
   ImageStyle,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { Ionicons } from "@expo/vector-icons";
 
 interface ImageInputProps {
   image?: string | ImagePicker.ImagePickerAsset | null;
   onChange: (image: ImagePicker.ImagePickerAsset) => void;
-  size?: number; // default square size
-  style?: StyleProp<ViewStyle>; // container style override
-  imageStyle?: StyleProp<ImageStyle>; // image style override
+  size?: number;
+  style?: StyleProp<ViewStyle>;
+  imageStyle?: StyleProp<ImageStyle>;
+  isEdit?: boolean; // 👈 NEW PROP
 }
 
 const ImageInput: React.FC<ImageInputProps> = ({
@@ -26,6 +29,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
   size = 120,
   style,
   imageStyle,
+  isEdit = false,
 }) => {
   const pickImage = async (): Promise<void> => {
     const permission =
@@ -63,25 +67,43 @@ const ImageInput: React.FC<ImageInputProps> = ({
   const source = getImageSource();
 
   return (
-    <TouchableOpacity onPress={pickImage} activeOpacity={0.8} style={{width: size, height: size}}>
+    <TouchableOpacity
+      onPress={pickImage}
+      activeOpacity={0.8}
+      style={{ width: size, height: size }}
+    >
       <View
         style={[
           styles.container,
           { width: size, height: size },
-          style, // 👈 custom override
+          style,
         ]}
       >
         {source ? (
-          <Image
-            source={source}
-            style={[
-              styles.image,
-              { width: size, height: size },
-              imageStyle, // 👈 custom image override
-            ]}
-          />
+          <>
+            <Image
+              source={source}
+              style={[
+                styles.image,
+                { width: size, height: size },
+                imageStyle,
+              ]}
+            />
+
+            {isEdit && (
+              <TouchableOpacity
+                style={styles.editButton}
+                onPress={pickImage}
+              >
+                <Ionicons name="pencil" size={16} color="#fff" />
+              </TouchableOpacity>
+            )}
+          </>
         ) : (
-          <View style={styles.placeholder} />
+          <View style={styles.placeholder}>
+            <Ionicons name="cloud-upload-outline" size={23} color="#555"  style={{marginBottom: 4}} />
+            <Text style={styles.uploadText}>Upload Image</Text>
+          </View>
         )}
       </View>
     </TouchableOpacity>
@@ -96,7 +118,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
-    borderRadius: 12, // square with rounded corners
+    borderRadius: 12,
   },
   image: {
     resizeMode: "cover",
@@ -105,5 +127,20 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     backgroundColor: "#D0D0D0",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  uploadText: {
+    color: "#555",
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  editButton: {
+    position: "absolute",
+    top: 6,
+    right: 6,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    padding: 6,
+    borderRadius: 20,
   },
 });

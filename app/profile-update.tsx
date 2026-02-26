@@ -1,8 +1,10 @@
 import DraggableSheet from "@/components/shared/dragable-sheet";
 import ImageInput from "@/components/ui/image-input";
+import { useAuth } from "@/context/auth-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import globalStyles from "@/styles";
 import * as ImagePicker from "expo-image-picker";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Alert,
@@ -21,33 +23,42 @@ export default function ProfileUpdateScreen() {
   const [designation, setDesignation] = useState("");
   const [address, setAddress] = useState("");
   const [image, setImage] = useState<string | ImagePicker.ImagePickerAsset | null>(null);
+  const { auth, setAuthContext } = useAuth();
 
   const axios = useAuthAxios();
-
   const handleUpdate = async () => {
     if (!image || !name || !emergencyContact || !designation || !address) {
       return Alert.alert("Error", "Please fill in all fields.");
     }
 
     try {
-      const res = await axios.post("/user/profile-update", {
-        name,
-        emergencyContact,
-        designation,
-        address,
-        image,
-      });
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("emergencyContact", emergencyContact);
+      formData.append("designation", designation);
+      formData.append("address", address);
+      if (image && typeof image !== "string") {
+        formData.append("image", {
+          uri: image.uri,
+          name: image.fileName || "profile.jpg",
+          type: image.mimeType || "image/jpeg",
+        } as any); // 👈 required cast
+      }
+      const res = await axios.put("/user/profile-update", formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+      if (auth) {
+        setAuthContext({ token: auth?.token, user: res?.data?.data });
+      }
+
+      router.push("/");
     } catch (error: any) {
       Alert.alert("Error", error.response?.data?.message);
     }
-
-    console.log({
-      image,
-      name,
-      emergencyContact,
-      designation,
-      address,
-    });
   };
 
   return (

@@ -27,12 +27,13 @@ export function useAuthAxios(): AxiosInstance {
                 }
                 const fullUrl = `${config.baseURL ?? ""}${config.url ?? ""}`;
 
-                console.log("🚀 REQUEST:", {
-                    method: config.method?.toUpperCase(),
-                    url: fullUrl,
-                    params: config.params,
-                    data: config.data,
-                });
+                // console.log("🚀 REQUEST:", {
+                //     method: config.method?.toUpperCase(),
+                //     url: fullUrl,
+                //     params: config.params,
+                //     data: config.data,
+                // });
+                console.log("🚀 REQUEST:", fullUrl);
                 return config;
             },
             (error: AxiosError) => Promise.reject(error)

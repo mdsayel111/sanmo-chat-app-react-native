@@ -32,7 +32,6 @@ export default function TabLayout() {
       const isNewUser =
         new Date(auth?.user.createdAt).getTime() ===
         new Date(auth?.user.updatedAt).getTime();
-  console.log(isNewUser)
       if (isNewUser) {
         return <Redirect href={"/profile-update"}/>
       } 

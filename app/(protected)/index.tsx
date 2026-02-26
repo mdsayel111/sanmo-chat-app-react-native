@@ -93,7 +93,6 @@ function HomeScreen() {
       >
         <Pressable
           onPress={() => {
-            console.log("click");
             router.push(`/chat?id=${item.id}`);
           }}
           style={styles.chatItem}
