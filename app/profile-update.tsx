@@ -14,6 +14,7 @@ import {
   Text,
   View
 } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileUpdateScreen() {
@@ -81,7 +82,7 @@ export default function ProfileUpdateScreen() {
 
       {/* White Card Form */}
       <DraggableSheet>
-        <View style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
           <View style={{ flex: 1 }}>
             {/* image */}
             <ImageInput
@@ -114,8 +115,10 @@ export default function ProfileUpdateScreen() {
             <TextInput value={emergencyContactRelation} onChangeText={(text) => setEmergencyContactRelation(text)} placeholder="Enter relation" label="Relation" />
           </View>
 
-          <Button text="Update Profile" onPress={handleUpdate} containerStyles={{ paddingBottom: 20 }} loading={loading} disabled={loading} />
-        </View>
+          <Button
+          
+          text="Update Profile" onPress={handleUpdate} containerStyles={{ paddingBottom: 20, marginVertical:20 }} loading={loading} disabled={loading} />
+        </ScrollView>
 
       </DraggableSheet>
     </SafeAreaView>

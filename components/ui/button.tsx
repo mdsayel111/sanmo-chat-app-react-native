@@ -38,7 +38,7 @@ export default function Button({
       activeOpacity={0.8}
     >
       {loading ? (
-        <ActivityIndicator size="large" color="#fff" />
+        <ActivityIndicator size="small" color="#fff" />
       ) : (
         <Text style={styles.text}>{text}</Text>
       )}
@@ -48,12 +48,10 @@ export default function Button({
 
 const styles = StyleSheet.create({
   button: {
-    marginTop: 30,
     paddingVertical: 16,
     borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 30,
   },
   text: {
     color: "#fff",

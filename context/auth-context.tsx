@@ -49,6 +49,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await AsyncStorage.removeItem("auth");
     };
 
+    const clearAsyncStorage = async () => {
+        try {
+            await AsyncStorage.clear();
+            console.log('AsyncStorage cleared successfully');
+        } catch (error) {
+            console.error('Error clearing AsyncStorage:', error);
+        }
+    };
+    // clearAsyncStorage()
     return (
         <AuthContext.Provider
             value={{
