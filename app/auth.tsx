@@ -54,7 +54,7 @@ export default function Auth() {
                     }
                 }}
             />
-            <Button text="Send OTP" onPress={sendOtp} loading={loading} />
+            <Button text="Send OTP" onPress={sendOtp} loading={loading} containerStyles={{ marginTop: 20 }} />
         </SafeAreaView>
     );
 }

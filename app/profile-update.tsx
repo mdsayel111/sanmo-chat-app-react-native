@@ -7,15 +7,16 @@ import { useAuthAxios } from "@/hooks/use-auth-axios";
 import globalStyles from "@/styles";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Alert,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   View
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileUpdateScreen() {
   const [name, setName] = useState("");
@@ -73,55 +74,58 @@ export default function ProfileUpdateScreen() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding"
+    >
+      <View style={styles.container}>
 
-      {/* Dark Header */}
-      <View style={styles.header}>
-        <Text style={globalStyles.pageHeader}>Update Profile</Text>
+        {/* Dark Header */}
+        <View style={styles.header}>
+          <Text style={globalStyles.pageHeader}>Update Profile</Text>
+        </View>
+
+        {/* White Card Form */}
+        <DraggableSheet>
+          <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+            <View style={{ flex: 1 }}>
+              {/* image */}
+              <ImageInput
+                image={image}
+                onChange={(image) => setImage(image)}
+              />
+
+              <Text style={{
+                fontSize: 20,
+                fontWeight: "900",
+                marginTop: 20,
+              }}>Personal Info :</Text>
+
+              <TextInput value={name} onChangeText={(text) => setName(text)} placeholder="Enter your name" label="Name" />
+              <TextInput value={designation} onChangeText={(text) => setDesignation(text)} placeholder="Enter your designation" label="Designation" />
+              <TextInput value={address} onChangeText={(text) => setAddress(text)} placeholder="Enter your address" label="Address" multiline />
+
+              <Text style={{
+                fontSize: 20,
+                fontWeight: "900",
+                marginTop: 20,
+              }}>Emergency Contact :</Text>
+
+              <TextInput value={emergencyContactName} onChangeText={(text) => setEmergencyContactName(text)} placeholder="Enter name" label="Name" />
+              <TextInput value={emergencyContactPhone} onChangeText={(text) => {
+                if (text.length < 12) {
+                  setEmergencyContactPhone(text);
+                }
+              }} placeholder="Enter phone number" keyboardType="phone-pad" label="Phone Number" />
+              <TextInput value={emergencyContactRelation} onChangeText={(text) => setEmergencyContactRelation(text)} placeholder="Enter relation" label="Relation" />
+            </View>
+
+            <Button
+
+              text="Update Profile" onPress={handleUpdate}
+              containerStyles={{ marginVertical: 20 }} loading={loading} disabled={loading} />
+          </ScrollView>
+        </DraggableSheet>
       </View>
-
-      {/* White Card Form */}
-      <DraggableSheet>
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-          <View style={{ flex: 1 }}>
-            {/* image */}
-            <ImageInput
-              image={image}
-              onChange={(image) => setImage(image)}
-            />
-
-            <Text style={{
-              fontSize: 20,
-              fontWeight: "900",
-              marginTop: 20,
-            }}>Personal Info :</Text>
-
-            <TextInput value={name} onChangeText={(text) => setName(text)} placeholder="Enter your name" label="Name" />
-            <TextInput value={designation} onChangeText={(text) => setDesignation(text)} placeholder="Enter your designation" label="Designation" />
-            <TextInput value={address} onChangeText={(text) => setAddress(text)} placeholder="Enter your address" label="Address" multiline />
-
-            <Text style={{
-              fontSize: 20,
-              fontWeight: "900",
-              marginTop: 20,
-            }}>Emergency Contact :</Text>
-
-            <TextInput value={emergencyContactName} onChangeText={(text) => setEmergencyContactName(text)} placeholder="Enter name" label="Name" />
-            <TextInput value={emergencyContactPhone} onChangeText={(text) => {
-              if (text.length < 11) {
-                setEmergencyContactPhone(text);
-              }
-            }} placeholder="Enter phone number" keyboardType="phone-pad" label="Phone Number" />
-            <TextInput value={emergencyContactRelation} onChangeText={(text) => setEmergencyContactRelation(text)} placeholder="Enter relation" label="Relation" />
-          </View>
-
-          <Button
-          
-          text="Update Profile" onPress={handleUpdate} containerStyles={{ paddingBottom: 20, marginVertical:20 }} loading={loading} disabled={loading} />
-        </ScrollView>
-
-      </DraggableSheet>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -180,3 +184,73 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
+
+import { useEffect, useRef } from "react";
+import {
+  Animated,
+  Keyboard
+} from "react-native";
+
+interface Props {
+  children: React.ReactNode;
+  extraBottomSpace?: number;
+}
+
+function KeyboardScrollContainer({
+  children,
+  extraBottomSpace = 20,
+}: Props) {
+  const scrollRef = useRef<ScrollView>(null);
+  const bottom = useRef(new Animated.Value(0)).current;
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
+      (e) => {
+        const height = e.endCoordinates.height;
+        setKeyboardHeight(height);
+
+        Animated.timing(bottom, {
+          toValue: height,
+          duration: 250,
+          useNativeDriver: false,
+        }).start();
+      }
+    );
+
+    const hideSub = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
+      () => {
+        setKeyboardHeight(0);
+        Animated.timing(bottom, {
+          toValue: 0,
+          duration: 250,
+          useNativeDriver: false,
+        }).start();
+      }
+    );
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+
+  return (
+    <Animated.View style={{ flex: 1, paddingBottom: bottom }}>
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingBottom: keyboardHeight + extraBottomSpace,
+        }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        {children}
+      </ScrollView>
+    </Animated.View>
+  );
+}
