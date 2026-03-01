@@ -1,4 +1,4 @@
-import { Link, Redirect, router, Tabs, usePathname } from "expo-router";
+import { Redirect, router, Stack, Tabs, usePathname } from "expo-router";
 import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
@@ -6,65 +6,45 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
+import { useAuth } from "@/context/auth-context";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import { useAuth } from "@/context/auth-context";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const pathname = usePathname();
-    const { auth, loading } = useAuth();
+  const { auth, loading } = useAuth();
 
   const hideRoutes = ["/chat", "/chat/[id]", "/auth", "/profile-update", "/verify-otp"];
   const shouldHideTab = hideRoutes.some(route =>
     pathname.startsWith(route.replace("[id]", ""))
   );
 
-  if(loading) {
-  return <></>
-}
-    if (!auth?.token) {
+
+
+  if (loading) {
+    return <></>
+  }
+  if (!auth?.token) {
     return <Redirect href="/auth" />;
   }
 
-  
-      const isNewUser =
-        new Date(auth?.user.createdAt).getTime() ===
-        new Date(auth?.user.updatedAt).getTime();
-      if (isNewUser) {
-        return <Redirect href={"/profile-update"}/>
-      } 
+
+  const isNewUser =
+    new Date(auth?.user.createdAt).getTime() ===
+    new Date(auth?.user.updatedAt).getTime();
+  if (isNewUser) {
+    return <Redirect href={"/profile-update"} />
+  }
 
   return (
     <>
-      <Tabs
+      <Stack
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerShown: false,
-          tabBarButton: HapticTab,
-          tabBarStyle: { display: "none" }
         }}
       >
-        <Tabs.Screen
-          name="index"
-          options={{
-            title: "home",
-            tabBarIcon: ({ color }) => (
-              <IconSymbol size={28} name="house.fill" color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="calls"
-          options={{
-            title: "Calls",
-            tabBarIcon: ({ color }) => (
-              <IconSymbol size={28} name="paperplane.fill" color={color} />
-            ),
-          }}
-        />
-      </Tabs>
+      </Stack>
 
       {!shouldHideTab && (
         <View style={styles.bottomTab}>
@@ -93,8 +73,7 @@ const TabItem = ({
   const isActive = pathname === navigateTo;
 
   return (
-        <Link href={navigateTo as any} asChild>
-    <TouchableOpacity activeOpacity={0.7}>
+    <TouchableOpacity activeOpacity={0.7} onPress={() => router.navigate(navigateTo as any)}>
       <View style={{ alignItems: "center", height: 45 }}>
         <Ionicons
           name={icon}
@@ -111,7 +90,6 @@ const TabItem = ({
         </Text>
       </View>
     </TouchableOpacity>
-        </Link>
   );
 };
 

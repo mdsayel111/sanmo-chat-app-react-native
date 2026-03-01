@@ -1,15 +1,17 @@
+import DraggableSheet from "@/components/shared/dragable-sheet";
+import BackButton from "@/components/ui/back-button";
+import Button from "@/components/ui/button";
+import { IMAGE_BASE_URL } from "@/config";
 import { useAuth } from "@/context/auth-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
 import React from "react";
 import {
     Image,
-    Pressable,
-    StatusBar,
     StyleSheet,
     Text,
     TouchableOpacity,
-    View,
+    View
 } from "react-native";
 
 interface SettingItemProps {
@@ -21,7 +23,7 @@ interface SettingItemProps {
 
 const SettingItem = ({ icon, title, subtitle, href }: SettingItemProps) => (
 
-    <TouchableOpacity style={styles.item} onPress={() => href && router.push(href)}>
+    <TouchableOpacity style={styles.item} onPress={() => href && router.navigate(href)}>
         <View style={styles.iconCircle}>
             <Feather name={icon} size={18} color="#6B7280" />
         </View>
@@ -34,19 +36,21 @@ const SettingItem = ({ icon, title, subtitle, href }: SettingItemProps) => (
 );
 
 const SettingsScreen = () => {
-    const { removeAuthContext } = useAuth();
+    const { auth, removeAuthContext } = useAuth();
 
     const logOut = async () => {
         await removeAuthContext();
     };
+
+    const user = auth?.user;
+    if (!user) return null
+
     return (
         <View style={styles.container}>
 
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity>
-                    <Feather name="arrow-left" size={22} color="#fff" />
-                </TouchableOpacity>
+                <BackButton onPress={() => router.back()} />
 
                 <Text style={styles.title}>Settings</Text>
 
@@ -54,65 +58,64 @@ const SettingsScreen = () => {
             </View>
 
             {/* Sheet */}
-            <View style={styles.sheet}>
-                <View style={styles.dragIndicator} />
+            <DraggableSheet>
+                <View style={{ flex: 1 }}>
+                    {/* Profile */}
+                    <View style={styles.profileRow}>
+                        <Image
+                            source={{ uri: IMAGE_BASE_URL + user?.image }}
+                            style={styles.avatar}
+                        />
 
-                {/* Profile */}
-                <View style={styles.profileRow}>
-                    <Image
-                        source={{ uri: "https://i.pravatar.cc/150?img=8" }}
-                        style={styles.avatar}
-                    />
+                        <View style={{ flex: 1 }}>
+                            <Text style={styles.name}>{user?.name}</Text>
+                            <Text style={styles.subtitle}>{user?.designation}</Text>
+                        </View>
 
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.name}>Nazrul Islam</Text>
-                        <Text style={styles.subtitle}>Never give up 💪</Text>
+                        <Ionicons name="qr-code-outline" size={22} color="#1BA784" />
                     </View>
 
-                    <Ionicons name="qr-code-outline" size={22} color="#1BA784" />
+                    <View style={styles.separator} />
+
+                    {/* Settings Items */}
+                    <SettingItem
+                        icon="key"
+                        title="Edit Profile"
+                        subtitle="Change your name, phone number, profile picture"
+                        href={"/my-profile"}
+                    />
+
+                    <SettingItem
+                        icon="message-circle"
+                        title="Chat"
+                        subtitle="Chat history, theme, wallpapers"
+                    />
+
+                    <SettingItem
+                        icon="bell"
+                        title="Notifications"
+                        subtitle="Messages, group and others"
+                    />
+
+                    <SettingItem
+                        icon="help-circle"
+                        title="Help"
+                        subtitle="Help center, contact us, privacy policy"
+                    />
+
+                    <SettingItem
+                        icon="arrow-down"
+                        title="Storage and data"
+                        subtitle="Network usage, storage usage"
+                    />
+
+                    <SettingItem
+                        icon="user-plus"
+                        title="Invite a friend"
+                        subtitle=""
+                    />
                 </View>
-
-                <View style={styles.separator} />
-
-                {/* Settings Items */}
-                <SettingItem
-                    icon="key"
-                    title="Edit Profile"
-                    subtitle="Change your name, phone number, profile picture"
-                    href={"/my-profile"}
-                />
-
-                <SettingItem
-                    icon="message-circle"
-                    title="Chat"
-                    subtitle="Chat history, theme, wallpapers"
-                />
-
-                <SettingItem
-                    icon="bell"
-                    title="Notifications"
-                    subtitle="Messages, group and others"
-                />
-
-                <SettingItem
-                    icon="help-circle"
-                    title="Help"
-                    subtitle="Help center, contact us, privacy policy"
-                />
-
-                <SettingItem
-                    icon="arrow-down"
-                    title="Storage and data"
-                    subtitle="Network usage, storage usage"
-                />
-
-                <SettingItem
-                    icon="user-plus"
-                    title="Invite a friend"
-                    subtitle=""
-                />
-
-                <Pressable style={styles.logOutButton} onPress={logOut}>
+                {/* <Pressable style={styles.logOutButton} onPress={logOut}>
                     <Text
                         style={{
                             color: "white",
@@ -122,8 +125,9 @@ const SettingsScreen = () => {
                     >
                         Log Out
                     </Text>
-                </Pressable>
-            </View>
+                </Pressable> */}
+                <Button text="Log Out" onPress={logOut} containerStyles={{ marginBottom: 20, backgroundColor: "red" }} />
+            </DraggableSheet>
         </View>
     );
 };

@@ -10,7 +10,6 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Alert,
-  Platform,
   StyleSheet,
   Text,
   View
@@ -179,74 +178,3 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-
-
-import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef } from "react";
-import {
-  Animated,
-  Keyboard
-} from "react-native";
-
-interface Props {
-  children: React.ReactNode;
-  extraBottomSpace?: number;
-}
-
-function KeyboardScrollContainer({
-  children,
-  extraBottomSpace = 20,
-}: Props) {
-  const scrollRef = useRef<ScrollView>(null);
-  const bottom = useRef(new Animated.Value(0)).current;
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  useEffect(() => {
-    const showSub = Keyboard.addListener(
-      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
-      (e) => {
-        const height = e.endCoordinates.height;
-        setKeyboardHeight(height);
-
-        Animated.timing(bottom, {
-          toValue: height,
-          duration: 250,
-          useNativeDriver: false,
-        }).start();
-      }
-    );
-
-    const hideSub = Keyboard.addListener(
-      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
-      () => {
-        setKeyboardHeight(0);
-        Animated.timing(bottom, {
-          toValue: 0,
-          duration: 250,
-          useNativeDriver: false,
-        }).start();
-      }
-    );
-
-    return () => {
-      showSub.remove();
-      hideSub.remove();
-    };
-  }, []);
-
-  return (
-    <Animated.View style={{ flex: 1, paddingBottom: bottom }}>
-      <ScrollView
-        ref={scrollRef}
-        contentContainerStyle={{
-          flexGrow: 1,
-          paddingBottom: keyboardHeight + extraBottomSpace,
-        }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        {children}
-      </ScrollView>
-    </Animated.View>
-  );
-}

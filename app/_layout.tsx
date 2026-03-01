@@ -26,6 +26,8 @@ export default function RootLayout() {
             >
               <Stack.Screen name="(protected)" />
               <Stack.Screen name="auth" />
+              <Stack.Screen name="(protected)/settings" />
+              <Stack.Screen name="(protected)/my-profile" />
               <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
             </Stack>
           </GestureHandlerRootView>

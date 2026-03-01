@@ -1,19 +1,19 @@
 import DraggableSheet from "@/components/shared/dragable-sheet";
+import BackButton from "@/components/ui/back-button";
 import Button from "@/components/ui/button";
 import ImageInput from "@/components/ui/image-input";
 import TextInput from "@/components/ui/text-input";
 import { IMAGE_BASE_URL } from "@/config";
 import { useAuth } from "@/context/auth-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
-import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
     Alert,
     ScrollView,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View
 } from "react-native";
 
@@ -31,24 +31,9 @@ export default function UserProfileUpdateScreen() {
     const [loading, setLoading] = useState(false);
     const { auth, setAuthContext } = useAuth();
 
-    const axios = useAuthAxios();
+    const user = auth?.user;
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const res = await axios.get("/user/profile");
-                setName(res.data?.data?.name);
-                setDesignation(res.data?.data?.designation);
-                setAddress(res.data?.data?.address);
-                setEmergencyContact(res.data?.data?.emergencyContact);
-                setPhone(res.data?.data?.phone);
-                setImage(IMAGE_BASE_URL + res.data?.data?.image);
-            } catch (error: any) {
-                console.log(error);
-            }
-        };
-        fetchProfile();
-    }, []);
+    const axios = useAuthAxios();
 
     const handleUpdate = async () => {
         setLoading(true);
@@ -60,11 +45,11 @@ export default function UserProfileUpdateScreen() {
             formData.append("emergencyContactPhone", emergencyContactPhone);
             formData.append("emergencyContactRelation", emergencyContactRelation);
             formData.append("emergencyContactName", emergencyContactName);
-            if (image && typeof image !== "string") {
+            if (image && typeof image === "string") {
                 formData.append("image", {
-                    uri: image.uri,
-                    name: image.fileName || "profile.jpg",
-                    type: image.mimeType || "image/jpeg",
+                    uri: image,
+                    name: "profile.jpg",
+                    type: "image/jpeg",
                 } as any);
             }
             const res = await axios.put("/user/profile-update", formData,
@@ -83,13 +68,24 @@ export default function UserProfileUpdateScreen() {
         setLoading(false);
     };
 
+    useEffect(() => {
+        if (user) {
+            setName(user?.name);
+            setDesignation(user?.designation);
+            setAddress(user?.address);
+            setEmergencyContactPhone(user?.emergencyContact?.phone);
+            setEmergencyContactRelation(user?.emergencyContact?.relation);
+            setEmergencyContactName(user?.emergencyContact?.name);
+            setImage(IMAGE_BASE_URL + user?.image);
+            setPhone(user?.phone);
+        }
+    }, []);
+
     return (
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity>
-                    <Feather name="arrow-left" size={22} color="#fff" />
-                </TouchableOpacity>
+                <BackButton onPress={() => router.back()} />
                 <View style={{ width: 22 }} />
             </View>
 
@@ -132,7 +128,7 @@ export default function UserProfileUpdateScreen() {
                         <TextInput value={emergencyContactRelation} onChangeText={(text) => setEmergencyContactRelation(text)} placeholder="Enter relation" label="Relation" />
                     </View>
 
-                    <Button text="Update Profile" onPress={handleUpdate} loading={loading} disabled={loading} />
+                    <Button text="Update Profile" onPress={handleUpdate} loading={loading} disabled={loading} containerStyles={{ marginVertical: 20 }} />
                 </ScrollView>
             </DraggableSheet >
         </View >
