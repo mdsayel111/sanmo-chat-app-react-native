@@ -8,6 +8,7 @@ import { useAuth } from "@/context/auth-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import {
     Alert,
@@ -81,8 +82,10 @@ export default function UserProfileUpdateScreen() {
         }
     }, []);
 
+
     return (
         <View style={styles.container}>
+            <StatusBar style="light" backgroundColor="#0f3d33" />
             {/* Header */}
             <View style={styles.header}>
                 <BackButton onPress={() => router.back()} />
@@ -138,7 +141,7 @@ export default function UserProfileUpdateScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#062E26",
+        backgroundColor: "#0f3d33",
         alignItems: "center",
     },
 

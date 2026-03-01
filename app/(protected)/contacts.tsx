@@ -1,14 +1,13 @@
+import { Feather, Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  StatusBar,
+    FlatList,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
 } from "react-native";
-import { Feather, Ionicons } from "@expo/vector-icons";
 
 interface Contact {
   id: string;
@@ -122,7 +121,7 @@ export default ContactsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#062E26",
+    backgroundColor: "#0f3d33",
   },
 
   header: {

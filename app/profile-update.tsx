@@ -7,6 +7,7 @@ import { useAuthAxios } from "@/hooks/use-auth-axios";
 import globalStyles from "@/styles";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
   Alert,
@@ -73,6 +74,7 @@ export default function ProfileUpdateScreen() {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="light" backgroundColor="#0f3d33" />
       {/* Dark Header */}
       <View style={styles.header}>
         <Text style={globalStyles.pageHeader}>Update Profile</Text>

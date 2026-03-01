@@ -112,7 +112,7 @@ const SettingsScreen = () => {
                     <SettingItem
                         icon="user-plus"
                         title="Invite a friend"
-                        subtitle=""
+                        subtitle="Invite your friends to chat with you"
                     />
                 </View>
                 {/* <Pressable style={styles.logOutButton} onPress={logOut}>
@@ -137,7 +137,7 @@ export default SettingsScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#062E26",
+        backgroundColor: "#0f3d33",
     },
 
     header: {

@@ -1,3 +1,5 @@
+import { IMAGE_BASE_URL } from "@/config";
+import { useAuth } from "@/context/auth-context";
 import { withAuth } from "@/HOF/auth-provider";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -6,11 +8,10 @@ import {
   FlatList,
   Image,
   Pressable,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SwipeableItem from "react-native-swipeable-item";
@@ -69,6 +70,7 @@ const chats: Chat[] = [
 ];
 
 function HomeScreen() {
+  const { auth } = useAuth();
   const renderRightActions = () => {
     return (
       <View style={styles.rightActions}>
@@ -133,12 +135,14 @@ function HomeScreen() {
 
         <Text style={styles.headerTitle}>Home</Text>
 
-        <Image
-          source={{
-            uri: "https://randomuser.me/api/portraits/men/11.jpg",
-          }}
-          style={styles.profile}
-        />
+        <Pressable onPress={() => router.navigate("/my-profile")}>
+          <Image
+            source={{
+              uri: IMAGE_BASE_URL + auth?.user?.image,
+            }}
+            style={styles.profile}
+          />
+        </Pressable>
       </View>
 
       {/* Stories */}
@@ -195,8 +199,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   profile: {
-    width: 35,
-    height: 35,
+    width: 40,
+    height: 40,
     borderRadius: 20,
   },
   storyContainer: {

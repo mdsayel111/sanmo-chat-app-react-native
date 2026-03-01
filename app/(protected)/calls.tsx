@@ -1,14 +1,13 @@
+import { Feather, Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   FlatList,
   Image,
+  StyleSheet,
+  Text,
   TouchableOpacity,
-  StatusBar,
+  View
 } from "react-native";
-import { Feather, Ionicons } from "@expo/vector-icons";
 
 interface CallItem {
   id: string;
@@ -130,7 +129,7 @@ export default CallsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#062E26",
+    backgroundColor: "#0f3d33",
   },
 
   header: {

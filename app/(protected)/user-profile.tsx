@@ -1,15 +1,14 @@
+import DraggableSheet from "@/components/shared/dragable-sheet";
+import { Feather } from "@expo/vector-icons";
 import React from "react";
 import {
-    View,
-    Text,
-    StyleSheet,
     Image,
-    TouchableOpacity,
-    StatusBar,
     ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
 } from "react-native";
-import { Feather, Ionicons } from "@expo/vector-icons";
-import DraggableSheet from "@/components/shared/dragable-sheet";
 
 const InfoRow = ({ label, value }: { label: string; value: string }) => (
     <View style={{ marginBottom: 18 }}>
@@ -106,7 +105,7 @@ export default function UserProfileScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#062E26",
+        backgroundColor: "#0f3d33",
         alignItems: "center",
     },
 
