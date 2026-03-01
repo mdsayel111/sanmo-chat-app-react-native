@@ -75,12 +75,14 @@ export default function DraggableModal({
   if (!visible) return null;
   return (
 
-    <GestureDetector gesture={gesture}>
-      <Animated.View style={[styles.modal, animatedStyle]}>
-        <View style={styles.dragIndicator} />
-        {children}
-      </Animated.View>
-    </GestureDetector>
+    <Animated.View style={[styles.modal, animatedStyle]}>
+      <GestureDetector gesture={gesture}>
+        <View style={{ width: "100%", height: 40, justifyContent: "center" }}>
+          <View style={styles.dragIndicator} />
+        </View>
+      </GestureDetector>
+      {children}
+    </Animated.View>
   );
 }
 
@@ -98,6 +100,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     padding: 10,
+    paddingTop: 0,
   },
   dragIndicator: {
     alignSelf: "center",
@@ -105,6 +108,5 @@ const styles = StyleSheet.create({
     height: 5,
     borderRadius: 3,
     backgroundColor: "#ccc",
-    marginBottom: 10,
   },
 });

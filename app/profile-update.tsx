@@ -72,9 +72,9 @@ export default function ProfileUpdateScreen() {
 
 
 
+
   return (
     <View style={styles.container}>
-      <StatusBar style="light" backgroundColor="#0f3d33" />
       {/* Dark Header */}
       <View style={styles.header}>
         <Text style={globalStyles.pageHeader}>Update Profile</Text>

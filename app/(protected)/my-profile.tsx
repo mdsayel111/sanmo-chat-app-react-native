@@ -22,7 +22,6 @@ export default function UserProfileUpdateScreen() {
     const [name, setName] = useState("");
     const [designation, setDesignation] = useState("");
     const [address, setAddress] = useState("");
-    const [emergencyContact, setEmergencyContact] = useState("");
     const [phone, setPhone] = useState("");
     const [emergencyContactName, setEmergencyContactName] = useState("");
     const [emergencyContactPhone, setEmergencyContactPhone] = useState("");
@@ -85,7 +84,6 @@ export default function UserProfileUpdateScreen() {
 
     return (
         <View style={styles.container}>
-            <StatusBar style="light" backgroundColor="#0f3d33" />
             {/* Header */}
             <View style={styles.header}>
                 <BackButton onPress={() => router.back()} />
