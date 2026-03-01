@@ -10,7 +10,6 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Alert,
-  KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
@@ -74,58 +73,54 @@ export default function ProfileUpdateScreen() {
 
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding"
-    >
-      <View style={styles.container}>
-
-        {/* Dark Header */}
-        <View style={styles.header}>
-          <Text style={globalStyles.pageHeader}>Update Profile</Text>
-        </View>
-
-        {/* White Card Form */}
-        <DraggableSheet>
-          <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-            <View style={{ flex: 1 }}>
-              {/* image */}
-              <ImageInput
-                image={image}
-                onChange={(image) => setImage(image)}
-              />
-
-              <Text style={{
-                fontSize: 20,
-                fontWeight: "900",
-                marginTop: 20,
-              }}>Personal Info :</Text>
-
-              <TextInput value={name} onChangeText={(text) => setName(text)} placeholder="Enter your name" label="Name" />
-              <TextInput value={designation} onChangeText={(text) => setDesignation(text)} placeholder="Enter your designation" label="Designation" />
-              <TextInput value={address} onChangeText={(text) => setAddress(text)} placeholder="Enter your address" label="Address" multiline />
-
-              <Text style={{
-                fontSize: 20,
-                fontWeight: "900",
-                marginTop: 20,
-              }}>Emergency Contact :</Text>
-
-              <TextInput value={emergencyContactName} onChangeText={(text) => setEmergencyContactName(text)} placeholder="Enter name" label="Name" />
-              <TextInput value={emergencyContactPhone} onChangeText={(text) => {
-                if (text.length < 12) {
-                  setEmergencyContactPhone(text);
-                }
-              }} placeholder="Enter phone number" keyboardType="phone-pad" label="Phone Number" />
-              <TextInput value={emergencyContactRelation} onChangeText={(text) => setEmergencyContactRelation(text)} placeholder="Enter relation" label="Relation" />
-            </View>
-
-            <Button
-
-              text="Update Profile" onPress={handleUpdate}
-              containerStyles={{ marginVertical: 20 }} loading={loading} disabled={loading} />
-          </ScrollView>
-        </DraggableSheet>
+    <View style={styles.container}>
+      {/* Dark Header */}
+      <View style={styles.header}>
+        <Text style={globalStyles.pageHeader}>Update Profile</Text>
       </View>
-    </KeyboardAvoidingView>
+
+      {/* White Card Form */}
+      <DraggableSheet>
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+          <View style={{ flex: 1 }}>
+            {/* image */}
+            <ImageInput
+              image={image}
+              onChange={(image) => setImage(image)}
+            />
+
+            <Text style={{
+              fontSize: 20,
+              fontWeight: "900",
+              marginTop: 20,
+            }}>Personal Info :</Text>
+
+            <TextInput value={name} onChangeText={(text) => setName(text)} placeholder="Enter your name" label="Name" />
+            <TextInput value={designation} onChangeText={(text) => setDesignation(text)} placeholder="Enter your designation" label="Designation" />
+            <TextInput value={address} onChangeText={(text) => setAddress(text)} placeholder="Enter your address" label="Address" multiline />
+
+            <Text style={{
+              fontSize: 20,
+              fontWeight: "900",
+              marginTop: 20,
+            }}>Emergency Contact :</Text>
+
+            <TextInput value={emergencyContactName} onChangeText={(text) => setEmergencyContactName(text)} placeholder="Enter name" label="Name" />
+            <TextInput value={emergencyContactPhone} onChangeText={(text) => {
+              if (text.length < 12) {
+                setEmergencyContactPhone(text);
+              }
+            }} placeholder="Enter phone number" keyboardType="phone-pad" label="Phone Number" />
+            <TextInput value={emergencyContactRelation} onChangeText={(text) => setEmergencyContactRelation(text)} placeholder="Enter relation" label="Relation" />
+          </View>
+
+          <Button
+
+            text="Update Profile" onPress={handleUpdate}
+            containerStyles={{ marginVertical: 20 }} loading={loading} disabled={loading} />
+        </ScrollView>
+      </DraggableSheet>
+    </View>
   );
 }
 
@@ -186,6 +181,7 @@ const styles = StyleSheet.create({
 });
 
 
+import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef } from "react";
 import {
   Animated,
