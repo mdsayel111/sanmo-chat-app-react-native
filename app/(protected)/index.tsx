@@ -1,9 +1,11 @@
+import DraggableModal from "@/components/shared/draggable-modal";
+import TextInput from "@/components/ui/text-input";
 import { IMAGE_BASE_URL } from "@/config";
 import { useAuth } from "@/context/auth-context";
 import { withAuth } from "@/HOF/auth-provider";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
   FlatList,
   Image,
@@ -71,6 +73,7 @@ const chats: Chat[] = [
 
 function HomeScreen() {
   const { auth } = useAuth();
+  const [searchModalVisible, setSearchModalVisible] = useState(false);
   const renderRightActions = () => {
     return (
       <View style={styles.rightActions}>
@@ -129,7 +132,7 @@ function HomeScreen() {
 
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setSearchModalVisible(true)}>
           <Feather name="search" size={22} color="white" />
         </TouchableOpacity>
 
@@ -138,7 +141,7 @@ function HomeScreen() {
         <Pressable onPress={() => router.navigate("/my-profile")}>
           <Image
             source={{
-              uri: IMAGE_BASE_URL + auth?.user?.image,
+              uri: IMAGE_BASE_URL as string + auth?.user?.image,
             }}
             style={styles.profile}
           />
@@ -173,6 +176,19 @@ function HomeScreen() {
           showsVerticalScrollIndicator={false}
         />
       </View>
+      <DraggableModal visible={searchModalVisible} onClose={() => setSearchModalVisible(false)}>
+        <View style={styles.searchModal}>
+          <TextInput placeholder="Search" style={styles.searchInput} />
+          <Text style={styles.sectionTitle}>Recent</Text>
+          <FlatList
+            data={chats}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            contentContainerStyle={{ paddingBottom: 20, gap: 10 }}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+      </DraggableModal>
     </SafeAreaView>
   );
 }
@@ -304,6 +320,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
+  },
+
+  searchModal: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 16,
+    paddingTop: 10,
+  },
+
+  searchInput: {
+    backgroundColor: "#fff",
+    borderRadius: 6,
+    paddingHorizontal: 15,
+    paddingVertical: 14,
+    fontSize: 14,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    marginBottom: 20,
+  },
+
+  separator: {
+    height: 1,
+    backgroundColor: "#F0F0F0",
+  },
+
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 10,
   },
 });
 
