@@ -63,7 +63,7 @@ export default function DraggableModal({
         } else {
           translateY.value = withSpring(0);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.log(error.message);
       }
     });
