@@ -1,4 +1,4 @@
-import DraggableSheet from "@/components/shared/dragable-sheet";
+import PrimaryWrapper from "@/components/shared/primary-wrapper";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
 import {
@@ -57,7 +57,7 @@ export default function UserProfileScreen() {
                 <ActionBtn icon="more-horizontal" />
             </View>
             
-            <DraggableSheet>
+            <PrimaryWrapper>
                 <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
                                    
                 <InfoRow label="Display Name" value="Jhon Abraham" />
@@ -97,7 +97,7 @@ export default function UserProfileScreen() {
                     </View>
                 </View>
                 </ScrollView>
-            </DraggableSheet>
+            </PrimaryWrapper>
         </View>
     );
 }

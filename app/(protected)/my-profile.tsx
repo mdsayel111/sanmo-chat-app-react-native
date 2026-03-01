@@ -1,4 +1,4 @@
-import DraggableSheet from "@/components/shared/dragable-sheet";
+import PrimaryWrapper from "@/components/shared/primary-wrapper";
 import BackButton from "@/components/ui/back-button";
 import Button from "@/components/ui/button";
 import ImageInput from "@/components/ui/image-input";
@@ -102,7 +102,7 @@ export default function UserProfileUpdateScreen() {
 
             <Text style={styles.name}>{name}</Text>
 
-            <DraggableSheet>
+            <PrimaryWrapper>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={{ flex: 1 }}>
                         <Text style={{
@@ -133,7 +133,7 @@ export default function UserProfileUpdateScreen() {
 
                     <Button text="Update Profile" onPress={handleUpdate} loading={loading} disabled={loading} containerStyles={{ marginVertical: 20 }} />
                 </ScrollView>
-            </DraggableSheet >
+            </PrimaryWrapper >
         </View >
     );
 }

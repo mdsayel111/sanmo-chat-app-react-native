@@ -1,4 +1,4 @@
-import DraggableSheet from "@/components/shared/dragable-sheet";
+import PrimaryWrapper from "@/components/shared/primary-wrapper";
 import BackButton from "@/components/ui/back-button";
 import Button from "@/components/ui/button";
 import { IMAGE_BASE_URL } from "@/config";
@@ -58,7 +58,7 @@ const SettingsScreen = () => {
             </View>
 
             {/* Sheet */}
-            <DraggableSheet>
+            <PrimaryWrapper>
                 <View style={{ flex: 1 }}>
                     {/* Profile */}
                     <View style={styles.profileRow}>
@@ -127,7 +127,7 @@ const SettingsScreen = () => {
                     </Text>
                 </Pressable> */}
                 <Button text="Log Out" onPress={logOut} containerStyles={{ marginBottom: 20, backgroundColor: "red" }} />
-            </DraggableSheet>
+            </PrimaryWrapper>
         </View>
     );
 };

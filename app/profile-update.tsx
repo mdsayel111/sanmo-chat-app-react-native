@@ -1,4 +1,4 @@
-import DraggableSheet from "@/components/shared/dragable-sheet";
+import PrimaryWrapper from "@/components/shared/primary-wrapper";
 import Button from "@/components/ui/button";
 import ImageInput from "@/components/ui/image-input";
 import TextInput from "@/components/ui/text-input";
@@ -81,7 +81,7 @@ export default function ProfileUpdateScreen() {
       </View>
 
       {/* White Card Form */}
-      <DraggableSheet>
+      <PrimaryWrapper>
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
           <View style={{ flex: 1 }}>
             {/* image */}
@@ -120,7 +120,7 @@ export default function ProfileUpdateScreen() {
             text="Update Profile" onPress={handleUpdate}
             containerStyles={{ marginVertical: 20 }} loading={loading} disabled={loading} />
         </ScrollView>
-      </DraggableSheet>
+      </PrimaryWrapper>
     </View>
   );
 }
