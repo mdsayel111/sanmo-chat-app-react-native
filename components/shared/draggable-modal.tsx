@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     width: "100%",
-    height: SCREEN_HEIGHT * 0.90,
+    height: SCREEN_HEIGHT * 0.88,
     backgroundColor: "white",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,

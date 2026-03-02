@@ -1,12 +1,16 @@
 import DraggableModal from "@/components/shared/draggable-modal";
+import NoData from "@/components/shared/no-data";
+import PrimaryWrapper from "@/components/shared/primary-wrapper";
 import TextInput from "@/components/ui/text-input";
 import { BASE_URL } from "@/config";
 import { useAuth } from "@/context/auth-context";
 import { withAuth } from "@/HOF/auth-provider";
+import { useAuthAxios } from "@/hooks/use-auth-axios";
 import globalStyles from "@/styles";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import EvilIcons from '@expo/vector-icons/EvilIcons';
 import {
   FlatList,
   Image,
@@ -18,6 +22,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SwipeableItem from "react-native-swipeable-item";
+import SearchModal from "@/components/home/search-modal";
 
 interface Chat {
   id: string;
@@ -75,6 +80,8 @@ const chats: Chat[] = [
 function HomeScreen() {
   const { auth } = useAuth();
   const [searchModalVisible, setSearchModalVisible] = useState(false);
+  const [chats, setChats] = useState([]);
+  const axios = useAuthAxios();
   const renderRightActions = () => {
     return (
       <View style={styles.rightActions}>
@@ -128,6 +135,14 @@ function HomeScreen() {
     );
   };
 
+  useEffect(() => {
+    const fetchChats = async () => {
+      const res = await axios.get("/chats");
+      setChats(res.data.data);
+    };
+    fetchChats();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
 
@@ -168,28 +183,22 @@ function HomeScreen() {
       </View>
 
       {/* Chat List */}
-      <View style={styles.chatContainer}>
-        <FlatList
-          data={chats}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          contentContainerStyle={{ paddingBottom: 20 }}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
-      <DraggableModal visible={searchModalVisible} onClose={() => setSearchModalVisible(false)}>
-        <View style={styles.searchModal}>
-          <TextInput placeholder="Search" style={styles.searchInput} />
-          <Text style={styles.sectionTitle}>Recent</Text>
-          <FlatList
-            data={chats}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-            contentContainerStyle={{ paddingBottom: 20, gap: 10 }}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
-      </DraggableModal>
+      <PrimaryWrapper>
+        {
+          chats.length > 0 ? (
+            <FlatList
+              data={chats}
+              keyExtractor={(item) => item.id}
+              renderItem={renderItem}
+              contentContainerStyle={{ paddingBottom: 20 }}
+              showsVerticalScrollIndicator={false}
+            />
+          ) : (
+            <NoData containerStyles={{ flex: 1 }} />
+          )
+        }
+      </PrimaryWrapper>
+      <SearchModal chats={chats} setSearchModalVisible={setSearchModalVisible} searchModalVisible={searchModalVisible} renderItem={renderItem} />
     </SafeAreaView>
   );
 }
@@ -234,13 +243,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 12,
     marginTop: 6,
-  },
-  chatContainer: {
-    flex: 1,
-    backgroundColor: "#f3f3f3",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingTop: 20,
   },
   chatItem: {
     flexDirection: "row",
@@ -317,36 +319,9 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
   },
-
-  searchModal: {
-    flex: 1,
-    backgroundColor: "#fff",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingHorizontal: 16,
-    paddingTop: 10,
-  },
-
-  searchInput: {
-    backgroundColor: "#fff",
-    borderRadius: 6,
-    paddingHorizontal: 15,
-    paddingVertical: 14,
-    fontSize: 14,
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
-    marginBottom: 20,
-  },
-
   separator: {
     height: 1,
     backgroundColor: "#F0F0F0",
-  },
-
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 10,
   },
 });
 
