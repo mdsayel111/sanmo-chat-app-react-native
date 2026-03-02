@@ -23,59 +23,27 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import SwipeableItem from "react-native-swipeable-item";
 import SearchModal from "@/components/home/search-modal";
+import { formatRelativeTime } from "@/utils/date";
+import { TMessage } from "@/types/message-type";
 
-interface Chat {
-  id: string;
+type TMember = {
+  _id: string;
+  name: string;
+  image: string;
+}
+
+interface TChat {
+  _id: string;
   name: string;
   message: string;
   time: string;
   unread?: number;
-  avatar: string;
+  image: string;
   online?: boolean;
+  lastMessage?: TMessage;
+  type: string;
+  members: TMember[];
 }
-
-const chats: Chat[] = [
-  {
-    id: "1",
-    name: "Alex Linderson",
-    message: "How are you today?",
-    time: "2 min ago",
-    unread: 3,
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    online: true,
-  },
-  {
-    id: "2",
-    name: "Team Align",
-    message: "Don’t miss to attend the meeting.",
-    time: "2 min ago",
-    unread: 4,
-    avatar: "https://randomuser.me/api/portraits/men/45.jpg",
-    online: true,
-  },
-  {
-    id: "3",
-    name: "John Ahrham",
-    message: "Hey! Can you join the meeting?",
-    time: "2 min ago",
-    avatar: "https://randomuser.me/api/portraits/men/65.jpg",
-  },
-  {
-    id: "4",
-    name: "Sabila Sayma",
-    message: "How are you today?",
-    time: "2 min ago",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-  },
-  {
-    id: "5",
-    name: "John Borino",
-    message: "Have a good day 🌸",
-    time: "2 min ago",
-    avatar: "https://randomuser.me/api/portraits/men/75.jpg",
-    online: true,
-  },
-];
 
 function HomeScreen() {
   const { auth } = useAuth();
@@ -96,7 +64,7 @@ function HomeScreen() {
     );
   };
 
-  const renderItem = ({ item }: { item: Chat }) => {
+  const renderItem = ({ item }: { item: TChat }) => {
     return (
       <SwipeableItem
         item={item}
@@ -106,24 +74,33 @@ function HomeScreen() {
       >
         <Pressable
           onPress={() => {
-            router.push(`/chat?id=${item.id}`);
+            router.push({
+              pathname: "/(protected)/chat/[type]/[id]",
+              params: {
+                type: item.type,
+                id: item._id,
+              },
+            });
           }}
           style={styles.chatItem}
         >
           <View>
-            <Image source={{ uri: item.avatar }} style={styles.avatar} />
+            <Image source={{ uri: BASE_URL + item.image }} style={styles.avatar} />
             {item.online && <View style={styles.onlineDot} />}
           </View>
 
           <View style={{ flex: 1, marginLeft: 12 }}>
             <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.message} numberOfLines={1}>
-              {item.message}
-            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}>
+              <Text style={styles.sender}>{item?.lastMessage?.sender === auth?.user?._id ? "You" : item.name}:</Text>
+              <Text style={styles.message} numberOfLines={1}>
+                {item?.lastMessage?.text || "No messages yet"}
+              </Text>
+            </View>
           </View>
 
           <View style={{ alignItems: "flex-end" }}>
-            <Text style={styles.time}>{item.time}</Text>
+            <Text style={styles.time}>{formatRelativeTime(item?.lastMessage?.createdAt)}</Text>
             {item.unread && (
               <View style={styles.unreadBadge}>
                 <Text style={styles.unreadText}>{item.unread}</Text>
@@ -137,11 +114,25 @@ function HomeScreen() {
 
   useEffect(() => {
     const fetchChats = async () => {
-      const res = await axios.get("/chats");
+      const res = await axios.get("/chat");
       setChats(res.data.data);
     };
     fetchChats();
   }, []);
+
+  const formatChats = (chats: TChat[]) => {
+    return chats.map((item: TChat) => {
+      if (item.type === "private") {
+        const otherUser = item?.members.find((member: TMember) => member._id !== auth?.user?._id) as TMember;
+        item.image = otherUser.image;
+        item.name = otherUser.name;
+      }
+
+      return item;
+    });
+  };
+
+
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -170,12 +161,12 @@ function HomeScreen() {
           horizontal
           showsHorizontalScrollIndicator={false}
           data={chats}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item: TChat) => item._id}
           renderItem={({ item }) => (
             <View style={styles.storyItem}>
-              <Image source={{ uri: item.avatar }} style={styles.storyAvatar} />
+              <Image source={{ uri: item.image }} style={styles.storyAvatar} />
               <Text style={styles.storyName}>
-                {item.name.split(" ")[0]}
+                {item.name}
               </Text>
             </View>
           )}
@@ -187,14 +178,14 @@ function HomeScreen() {
         {
           chats.length > 0 ? (
             <FlatList
-              data={chats}
-              keyExtractor={(item) => item.id}
+              data={formatChats(chats)}
+              keyExtractor={(item) => item._id}
               renderItem={renderItem}
               contentContainerStyle={{ paddingBottom: 20 }}
               showsVerticalScrollIndicator={false}
             />
           ) : (
-            <NoData containerStyles={{ flex: 1 }} />
+            <NoData containerStyles={{ flex: 1 }} text="No chat found" />
           )
         }
       </PrimaryWrapper>
@@ -220,8 +211,8 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   profile: {
-    width: 43,
-    height: 43,
+    width: 40,
+    height: 40,
     borderRadius: 20,
   },
   storyContainer: {
@@ -274,11 +265,16 @@ const styles = StyleSheet.create({
   },
   message: {
     color: "#777",
-    marginTop: 4,
+    fontSize: 16,
   },
   time: {
     fontSize: 12,
     color: "#999",
+  },
+  sender: {
+    fontSize: 16,
+    color: "green",
+    marginRight: 4,
   },
   unreadBadge: {
     backgroundColor: "#FF3B30",

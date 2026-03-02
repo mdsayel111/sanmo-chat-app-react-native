@@ -3,7 +3,7 @@ import NoData from "@/components/shared/no-data";
 import TextInput from "@/components/ui/text-input";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import EvilIcons from '@expo/vector-icons/EvilIcons';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     FlatList,
     ListRenderItem,
@@ -29,6 +29,10 @@ export default function SearchModal({ chats, setSearchModalVisible, searchModalV
             console.log(error.response?.data?.message);
         }
     };
+
+    useEffect(() => {
+        handleSearch("")
+    }, []);
     return (
         <DraggableModal visible={searchModalVisible} onClose={() => setSearchModalVisible(false)}>
             <View style={styles.searchModal}>
@@ -37,19 +41,19 @@ export default function SearchModal({ chats, setSearchModalVisible, searchModalV
                     <TextInput placeholder="Search" style={styles.searchInput} onChangeText={handleSearch} />
                 </View>
                 {
-                    chats.length > 0 ? (
+                    searchChats.length > 0 ? (
                         <>
                             <Text style={styles.sectionTitle}>Recent</Text>
                             <FlatList
-                                data={chats}
-                                keyExtractor={(item) => item.id}
+                                data={searchChats}
+                                keyExtractor={(item) => item._id}
                                 renderItem={renderItem}
                                 contentContainerStyle={{ paddingBottom: 20, gap: 10 }}
                                 showsVerticalScrollIndicator={false}
                             />
                         </>
                     ) : (
-                        <NoData />
+                        <NoData text="No reult found!"/>
                     )
                 }
             </View>

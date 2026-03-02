@@ -1,13 +1,13 @@
+import { BASE_URL } from "@/config";
+import { useAuth } from "@/context/auth-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { BASE_URL } from "@/config";
-import { useNavigation } from "@react-navigation/native";
 
 export const useSocket = () => {
-    const navigation = useNavigation<any>();
     const socketRef = useRef<Socket | null>(null);
     const [connected, setConnected] = useState(false);
+    const { removeAuthContext } = useAuth();
 
     useEffect(() => {
         // let isMounted = true;
@@ -18,10 +18,12 @@ export const useSocket = () => {
             const token = auth?.token;
 
             if (!token) {
-                navigation.reset({
-                    index: 0,
-                    routes: [{ name: "Auth" }],
-                });
+                // navigation.reset({
+                //     index: 0,
+                //     routes: [{ name: "Auth" }],
+                // });
+                // router.
+                removeAuthContext();
                 return;
             }
 
@@ -56,12 +58,13 @@ export const useSocket = () => {
                     err.message === "Invalid or expired token" ||
                     err.message === "Authentication required"
                 ) {
-                    await AsyncStorage.removeItem("auth");
+                    // await AsyncStorage.removeItem("auth");
+                    removeAuthContext();
 
-                    navigation.reset({
-                        index: 0,
-                        routes: [{ name: "Auth" }],
-                    });
+                    // navigation.reset({
+                    //     index: 0,
+                    //     routes: [{ name: "Auth" }],
+                    // });
                 }
             });
         };
