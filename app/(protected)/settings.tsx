@@ -1,7 +1,7 @@
 import PrimaryWrapper from "@/components/shared/primary-wrapper";
 import BackButton from "@/components/ui/back-button";
 import Button from "@/components/ui/button";
-import { IMAGE_BASE_URL } from "@/config";
+import { BASE_URL } from "@/config";
 import { useAuth } from "@/context/auth-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
@@ -63,7 +63,7 @@ const SettingsScreen = () => {
                     {/* Profile */}
                     <View style={styles.profileRow}>
                         <Image
-                            source={{ uri: IMAGE_BASE_URL + user?.image }}
+                            source={{ uri: BASE_URL + user?.image }}
                             style={styles.avatar}
                         />
 

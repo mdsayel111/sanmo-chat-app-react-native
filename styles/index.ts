@@ -1,13 +1,13 @@
 import { StyleSheet } from "react-native";
 
 const globalStyles = StyleSheet.create({
-    buttonDisabled: {
-        backgroundColor: "#ccc",
-        opacity: 0.5,
-    },
-    pageHeader:{
+  buttonDisabled: {
+    backgroundColor: "#ccc",
+    opacity: 0.5,
+  },
+  pageHeader: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: 26,
     fontWeight: "600",
   },
 });

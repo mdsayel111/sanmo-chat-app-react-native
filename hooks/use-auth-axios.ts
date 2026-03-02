@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/config";
+import { API_URL } from "@/config";
 import { useAuth } from "@/context/auth-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, {
@@ -10,7 +10,7 @@ import { useEffect } from "react";
 
 // create singleton instance
 const axiosInstance: AxiosInstance = axios.create({
-    baseURL: BASE_URL,
+    baseURL: API_URL,
     timeout: 10000,
 });
 

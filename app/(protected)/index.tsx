@@ -1,8 +1,9 @@
 import DraggableModal from "@/components/shared/draggable-modal";
 import TextInput from "@/components/ui/text-input";
-import { IMAGE_BASE_URL } from "@/config";
+import { BASE_URL } from "@/config";
 import { useAuth } from "@/context/auth-context";
 import { withAuth } from "@/HOF/auth-provider";
+import globalStyles from "@/styles";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -133,15 +134,15 @@ function HomeScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => setSearchModalVisible(true)}>
-          <Feather name="search" size={22} color="white" />
+          <Feather name="search" size={26} color="white" />
         </TouchableOpacity>
 
-        <Text style={styles.headerTitle}>Home</Text>
+        <Text style={globalStyles.pageHeader}>Home</Text>
 
         <Pressable onPress={() => router.navigate("/my-profile")}>
           <Image
             source={{
-              uri: IMAGE_BASE_URL as string + auth?.user?.image,
+              uri: BASE_URL as string + auth?.user?.image,
             }}
             style={styles.profile}
           />
@@ -207,21 +208,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 15,
-  },
-  headerTitle: {
-    color: "white",
-    fontSize: 20,
-    fontWeight: "600",
+    paddingBottom: 20,
   },
   profile: {
-    width: 40,
-    height: 40,
+    width: 43,
+    height: 43,
     borderRadius: 20,
   },
   storyContainer: {
     paddingLeft: 15,
-    paddingVertical: 10,
+    paddingVertical: 30,
   },
   storyItem: {
     alignItems: "center",

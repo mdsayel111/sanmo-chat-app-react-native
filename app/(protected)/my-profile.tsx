@@ -3,12 +3,11 @@ import BackButton from "@/components/ui/back-button";
 import Button from "@/components/ui/button";
 import ImageInput from "@/components/ui/image-input";
 import TextInput from "@/components/ui/text-input";
-import { IMAGE_BASE_URL } from "@/config";
+import { BASE_URL } from "@/config";
 import { useAuth } from "@/context/auth-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import {
     Alert,
@@ -76,7 +75,7 @@ export default function UserProfileUpdateScreen() {
             setEmergencyContactPhone(user?.emergencyContact?.phone);
             setEmergencyContactRelation(user?.emergencyContact?.relation);
             setEmergencyContactName(user?.emergencyContact?.name);
-            setImage(IMAGE_BASE_URL + user?.image);
+            setImage(BASE_URL + user?.image);
             setPhone(user?.phone);
         }
     }, []);
