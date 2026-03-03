@@ -27,6 +27,8 @@ export default function Auth() {
             const res = await axios.post("/auth/get-otp", {
                 phone,
             });
+
+            console.log(res?.data?.data)
             router.push({
                 pathname: "/verify-otp",
                 params: { phone },

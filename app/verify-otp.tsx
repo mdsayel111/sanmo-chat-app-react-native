@@ -80,7 +80,20 @@ export default function VerifyOtp() {
     setLoading(false);
   };
 
-  const resendOtp = () => {
+  const resendOtp = async () => {
+    if (!phone || phone.length !== 11) {
+      Alert.alert("Invalid phone number");
+      return;
+    }
+    try {
+      const res = await axios.post("/auth/get-otp", {
+        phone,
+      });
+
+      console.log(res?.data?.data)
+    } catch (error: any) {
+      Alert.alert(error.response?.data?.message);
+    }
     setTimer(60);
   };
 

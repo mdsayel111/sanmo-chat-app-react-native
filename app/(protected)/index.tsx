@@ -25,6 +25,7 @@ import SwipeableItem from "react-native-swipeable-item";
 import SearchModal from "@/components/home/search-modal";
 import { formatRelativeTime } from "@/utils/date";
 import { TMessage } from "@/types/message-type";
+import { useSocket } from "@/context/socket-context";
 
 type TMember = {
   _id: string;
@@ -40,15 +41,16 @@ interface TChat {
   unread?: number;
   image: string;
   online?: boolean;
-  lastMessage?: TMessage;
+  lastMessage: TMessage;
   type: string;
   members: TMember[];
 }
 
 function HomeScreen() {
   const { auth } = useAuth();
+  const { socket } = useSocket();
   const [searchModalVisible, setSearchModalVisible] = useState(false);
-  const [chats, setChats] = useState([]);
+  const [chats, setChats] = useState<TChat[]>([]);
   const axios = useAuthAxios();
   const renderRightActions = () => {
     return (
@@ -120,6 +122,19 @@ function HomeScreen() {
     fetchChats();
   }, []);
 
+  // socket events listener
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("chat:receive", (chat: TChat) => {
+      setChats(prev => [formatChats([chat])[0], ...prev]);
+    });
+
+    return () => {
+      socket.off("chat:receive");
+    };
+  }, [socket]);
+
   const formatChats = (chats: TChat[]) => {
     return chats.map((item: TChat) => {
       if (item.type === "private") {
@@ -131,8 +146,6 @@ function HomeScreen() {
       return item;
     });
   };
-
-
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>

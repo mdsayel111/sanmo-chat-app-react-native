@@ -32,6 +32,10 @@ const ChatScreen: React.FC = () => {
     const params = useLocalSearchParams();
     const [inputText, setInputText] = useState("");
     const axios = useAuthAxios();
+
+    const [id, setId] = useState(params.id);
+    const [type, setType] = useState(params.type);
+
     const renderItem: ListRenderItem<TMessage> = ({ item }) => {
         if (item.type === "voice") {
             return (
@@ -80,12 +84,15 @@ const ChatScreen: React.FC = () => {
     const handleSend = async (text: string) => {
         if (params.type === "user") {
             try {
-                const res = await axios.post("/message/" + params.type + "/" + params.id, {
+                const res = await axios.post("/message/" + params.type + "/" + id, {
                     text,
                     sender: auth?.user?._id,
                     type: "text",
                 });
-                setMessages(prev => [...prev, res.data.data as TMessage]);
+                setMessages(prev => [...prev, res?.data?.data?.message as TMessage]);
+                setInputText("");
+                setId(res?.data?.data?.chat?._id);
+                setType(res?.data?.data?.chat?.type);
             } catch (error: any) {
                 console.log(error.response?.data?.message);
             }
@@ -125,7 +132,7 @@ const ChatScreen: React.FC = () => {
                     <FlatList
                         data={messages}
                         renderItem={renderItem}
-                        keyExtractor={(item) => item.id}
+                        keyExtractor={(item) => item._id}
                         contentContainerStyle={{ padding: 16 }}
                     />
                 ) : (
@@ -136,7 +143,7 @@ const ChatScreen: React.FC = () => {
             {/* Input */}
             <View style={styles.inputBar}>
                 <Feather name="paperclip" size={20} color="#777" />
-                <TextInput placeholder="Write your message" style={styles.input} onChangeText={setInputText} />
+                <TextInput placeholder="Write your message" style={styles.input} onChangeText={setInputText} value={inputText} />
                 <Feather name="camera" size={20} color="#777" />
                 <TouchableOpacity style={styles.sendBtn}
                     onPress={() => handleSend(inputText)}
@@ -191,7 +198,7 @@ const styles = StyleSheet.create({
     },
 
     outgoing: {
-        backgroundColor: "#1BA784",
+        backgroundColor: "#0f3d33",
         alignSelf: "flex-end",
     },
 
@@ -201,7 +208,7 @@ const styles = StyleSheet.create({
     voiceContainer: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#1BA784",
+        backgroundColor: "#0f3d33",
         padding: 10,
         borderRadius: 14,
         alignSelf: "flex-end",

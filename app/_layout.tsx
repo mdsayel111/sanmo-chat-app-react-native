@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { AuthProvider } from '@/context/auth-context';
-import { useSocket } from '@/hooks/useSocket';
+import { SocketProvider } from '@/context/socket-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
@@ -14,13 +14,14 @@ export const unstable_settings = {
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <Children />
+      <SocketProvider>
+        <Children />
+      </SocketProvider>
     </AuthProvider>
   );
 }
 
 const Children = () => {
-  useSocket();
   return (<SafeAreaProvider>
     <SafeAreaView style={{ flex: 1 }} >
       <StatusBar style="light" backgroundColor="#0f3d33" />
