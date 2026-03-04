@@ -6,4 +6,5 @@ export type TMessage = {
     text?: string;
     sender: string;
     createdAt: string;
+    chat: string;
 }

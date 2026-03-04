@@ -2,6 +2,7 @@ import NoData from "@/components/shared/no-data";
 import BackButton from "@/components/ui/back-button";
 import { BASE_URL } from "@/config";
 import { useAuth } from "@/context/auth-context";
+import { useSocket } from "@/context/socket-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import { TMessage } from "@/types/message-type";
 import { Feather } from "@expo/vector-icons";
@@ -32,6 +33,7 @@ const ChatScreen: React.FC = () => {
     const params = useLocalSearchParams();
     const [inputText, setInputText] = useState("");
     const axios = useAuthAxios();
+    const { socket } = useSocket();
 
     const [id, setId] = useState(params.id);
     const [type, setType] = useState(params.type);
@@ -107,6 +109,23 @@ const ChatScreen: React.FC = () => {
         };
         fetchMessages();
     }, []);
+
+
+    // socket events listener
+    // useEffect(() => {
+    //     if (!socket) return;
+    //     socket.on(`message:receive:${params.type}/${params.id}`, (message: TMessage) => {
+    //         setMessages(prev => {
+    //             // const chat = prev.find(item => item._id === message.chat);
+    //             // if (!chat) return prev;
+    //             // chat.lastMessage = message;
+    //             return [...prev];
+    //         });
+    //     });
+    //     return () => {
+    //         socket.off("message:receive");
+    //     };
+    // }, [socket]);
 
 
     return (

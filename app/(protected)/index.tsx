@@ -93,16 +93,15 @@ function HomeScreen() {
 
           <View style={{ flex: 1, marginLeft: 12 }}>
             <Text style={styles.name}>{item.name}</Text>
-            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}>
-              <Text style={styles.sender}>{item?.lastMessage?.sender === auth?.user?._id ? "You" : item.name}:</Text>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4, gap: 6 }}>
               <Text style={styles.message} numberOfLines={1}>
                 {item?.lastMessage?.text || "No messages yet"}
               </Text>
+              <Text style={styles.time}>{formatRelativeTime(item?.lastMessage?.createdAt)}</Text>
             </View>
           </View>
 
           <View style={{ alignItems: "flex-end" }}>
-            <Text style={styles.time}>{formatRelativeTime(item?.lastMessage?.createdAt)}</Text>
             {item.unread && (
               <View style={styles.unreadBadge}>
                 <Text style={styles.unreadText}>{item.unread}</Text>
@@ -128,6 +127,15 @@ function HomeScreen() {
 
     socket.on("chat:receive", (chat: TChat) => {
       setChats(prev => [formatChats([chat])[0], ...prev]);
+    });
+
+    socket.on("message:receive", (message: TMessage) => {
+      setChats(prev => {
+        const chat = prev.find(item => item._id === message.chat);
+        if (!chat) return prev;
+        chat.lastMessage = message;
+        return [...prev];
+      });
     });
 
     return () => {
@@ -281,8 +289,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   time: {
-    fontSize: 12,
-    color: "#999",
+    fontSize: 13,
+    color: "green",
   },
   sender: {
     fontSize: 16,
