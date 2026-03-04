@@ -138,7 +138,7 @@ const ChatScreen: React.FC = () => {
                     <Text style={styles.name}>{chatInfo?.name}</Text>
                     <Text style={styles.status}>Active now</Text>
                 </View>
-                <Feather name="phone" size={20} style={styles.headerIcon} />
+                <Feather name="phone" size={20} style={styles.headerIcon} onPress={() => router.navigate("/call")} />
                 <Feather name="video" size={20} style={[styles.headerIcon, { marginRight: 10 }]} />
             </View>
 
