@@ -103,7 +103,7 @@ const ChatScreen: React.FC = () => {
 
     useEffect(() => {
         const fetchMessages = async () => {
-            const res = await axios.get("/message/" + params.type + "/" + params.id);
+            const res = await axios.get("/message/" + type + "/" + id);
             setMessages(res?.data?.data?.messages);
             setChatInfo(res?.data?.data?.chat as TChatInfo);
         };
@@ -112,20 +112,17 @@ const ChatScreen: React.FC = () => {
 
 
     // socket events listener
-    // useEffect(() => {
-    //     if (!socket) return;
-    //     socket.on(`message:receive:${params.type}/${params.id}`, (message: TMessage) => {
-    //         setMessages(prev => {
-    //             // const chat = prev.find(item => item._id === message.chat);
-    //             // if (!chat) return prev;
-    //             // chat.lastMessage = message;
-    //             return [...prev];
-    //         });
-    //     });
-    //     return () => {
-    //         socket.off("message:receive");
-    //     };
-    // }, [socket]);
+    useEffect(() => {
+        if (!socket) return;
+        socket.on(`message:receive:${id}`, (message: TMessage) => {
+            setMessages(prev => {
+                return [...prev, message];
+            });
+        });
+        return () => {
+            socket.off("message:receive");
+        };
+    }, [socket, id]);
 
 
     return (

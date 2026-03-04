@@ -202,7 +202,7 @@ function HomeScreen() {
               data={formatChats(chats)}
               keyExtractor={(item) => item._id}
               renderItem={renderItem}
-              contentContainerStyle={{ paddingBottom: 20 }}
+              contentContainerStyle={{ paddingBottom: 20, gap: 10 }}
               showsVerticalScrollIndicator={false}
             />
           ) : (
