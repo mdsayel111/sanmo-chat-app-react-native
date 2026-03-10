@@ -77,7 +77,7 @@ function HomeScreen() {
         <Pressable
           onPress={() => {
             router.push({
-              pathname: "/(protected)/chat/[type]/[id]",
+              pathname: "/chat/[type]/[id]",
               params: {
                 type: item.type,
                 id: item._id,

@@ -69,7 +69,7 @@ export default function VerifyOtp() {
         });
       } else {
         router.push({
-          pathname: "/(protected)"
+          pathname: "/"
         });
       }
 

@@ -12,14 +12,12 @@ import {
     FlatList,
     Image,
     ListRenderItem,
-    Pressable,
     StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
-    View,
+    View
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 type TChatInfo = {
     _id: string;
@@ -138,7 +136,9 @@ const ChatScreen: React.FC = () => {
                     <Text style={styles.name}>{chatInfo?.name}</Text>
                     <Text style={styles.status}>Active now</Text>
                 </View>
-                <Feather name="phone" size={20} style={styles.headerIcon} onPress={() => router.navigate("/call")} />
+                <Feather name="phone" size={20} style={styles.headerIcon} onPress={() =>
+                    router.push("/call")
+                } />
                 <Feather name="video" size={20} style={[styles.headerIcon, { marginRight: 10 }]} />
             </View>
 

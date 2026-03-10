@@ -1,174 +1,17 @@
-// import React, { useEffect, useRef, useState } from "react";
-// import { View, Button } from "react-native";
-// import {
-//     RTCPeerConnection,
-//     RTCView,
-//     mediaDevices,
-//     RTCSessionDescription,
-// } from "react-native-webrtc";
-// import { useSocket } from "@/context/socket-context";
-
-// const configuration = {
-//     iceServers: [
-//         { urls: "stun:stun.l.google.com:19302" }
-//     ],
-// };
-
-// export default function CallScreen() {
-//     const { socket } = useSocket();
-
-//     const peerConnection = useRef<RTCPeerConnection | null>(null);
-//     const [localStream, setLocalStream] = useState<any>(null);
-//     const [remoteStream, setRemoteStream] = useState<any>(null);
-
-//     useEffect(() => {
-//         if (!socket) return;
-
-//         console.log("🟢 Setting socket listeners");
-
-//         peerConnection.current = new RTCPeerConnection(configuration);
-
-//         // Event: Remote track received
-//         peerConnection.current.ontrack = (event) => {
-//             console.log("🎥 Remote track received");
-//             if (event.streams && event.streams[0]) {
-//                 setRemoteStream(event.streams[0]);
-//             }
-//         };
-
-//         // Event: ICE candidate generated locally
-//         peerConnection.current.onicecandidate = (event) => {
-//             if (event.candidate) {
-//                 console.log("🧊 Sending ICE candidate");
-//                 socket.emit("ice-candidate", {
-//                     roomId: "room1",
-//                     candidate: event.candidate,
-//                 });
-//             }
-//         };
-
-//         // Join room
-//         socket.emit("join-room", "room1");
-
-//         // Receive Offer
-//         socket.on("offer", async (offer) => {
-//             console.log("📩 Offer received");
-
-//             if (!peerConnection.current) return;
-
-//             await peerConnection.current.setRemoteDescription(
-//                 new RTCSessionDescription(offer)
-//             );
-
-//             // Get local media for receiver
-//             const stream = await mediaDevices.getUserMedia({
-//                 video: true,
-//                 audio: true,
-//             });
-//             setLocalStream(stream);
-
-//             // Add local tracks to connection
-//             stream.getTracks().forEach((track) => {
-//                 peerConnection.current?.addTrack(track, stream);
-//             });
-
-//             // Create and send answer
-//             const answer = await peerConnection.current.createAnswer();
-//             await peerConnection.current.setLocalDescription(answer);
-
-//             socket.emit("answer", { roomId: "room1", answer });
-//             console.log("📤 Answer sent");
-//         });
-
-//         // Receive Answer
-//         socket.on("answer", async (answer) => {
-//             console.log("📩 Answer received");
-//             await peerConnection.current?.setRemoteDescription(
-//                 new RTCSessionDescription(answer)
-//             );
-//         });
-
-//         // Receive ICE candidate from remote
-//         socket.on("ice-candidate", async (candidate) => {
-//             console.log("🧊 ICE candidate received");
-//             try {
-//                 await peerConnection.current?.addIceCandidate(candidate);
-//             } catch (err) {
-//                 console.log("ICE error:", err);
-//             }
-//         });
-
-//         peerConnection.current.oniceconnectionstatechange = () => {
-//             console.log(
-//                 "ICE connection state:",
-//                 peerConnection.current?.iceConnectionState
-//             );
-//         };
-
-//         return () => {
-//             peerConnection.current?.close();
-//             peerConnection.current = null;
-//             setLocalStream(null);
-//             setRemoteStream(null);
-//         };
-//     }, [socket]);
-
-//     const startCall = async () => {
-//         console.log("📞 Starting call");
-
-//         if (!peerConnection.current) return;
-
-//         const stream = await mediaDevices.getUserMedia({
-//             video: true,
-//             audio: true,
-//         });
-//         setLocalStream(stream);
-
-//         // Add local tracks to connection
-//         stream.getTracks().forEach((track) => {
-//             peerConnection.current?.addTrack(track, stream);
-//         });
-
-//         // Create offer
-//         const offer = await peerConnection.current.createOffer();
-//         await peerConnection.current.setLocalDescription(offer);
-
-//         socket?.emit("offer", { roomId: "room1", offer });
-//         console.log("📤 Offer sent");
-//     };
-
-//     return (
-//         <View style={{ flex: 1 }}>
-//             {localStream && (
-//                 <RTCView
-//                     streamURL={localStream.toURL()}
-//                     style={{ width: "100%", height: 250 }}
-//                 />
-//             )}
-//             {remoteStream && (
-//                 <RTCView
-//                     streamURL={remoteStream.toURL()}
-//                     style={{ width: "100%", height: 250 }}
-//                 />
-//             )}
-//             <Button title="Start Call" onPress={startCall} />
-//         </View>
-//     );
-// }
-
-
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useEffect, useRef, useState } from "react";
-import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
+import { BackHandler, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import {
-    RTCPeerConnection,
-    RTCView,
     mediaDevices,
+    RTCPeerConnection,
     RTCSessionDescription,
+    RTCView,
 } from "react-native-webrtc";
 
 import { useSocket } from "@/context/socket-context";
-import { Ionicons } from "@expo/vector-icons";
+import { router, useLocalSearchParams } from "expo-router";
 
 const configuration = {
     iceServers: [
@@ -177,6 +20,9 @@ const configuration = {
 };
 
 export default function CallScreen() {
+    const { id, type } = useLocalSearchParams<any>();
+
+    const [backEnabled, setBackEnabled] = useState(false);
 
     const { socket } = useSocket();
 
@@ -200,7 +46,7 @@ export default function CallScreen() {
 
         peerConnection.current = new RTCPeerConnection(configuration);
 
-        socket.emit("join-room", "room1");
+        socket.emit("join-room", id);
 
         peerConnection.current.ontrack = (event) => {
             if (event.streams?.[0]) {
@@ -211,7 +57,7 @@ export default function CallScreen() {
         peerConnection.current.onicecandidate = (event) => {
             if (event.candidate) {
                 socket.emit("ice-candidate", {
-                    roomId: "room1",
+                    roomId: id,
                     candidate: event.candidate
                 });
             }
@@ -242,8 +88,22 @@ export default function CallScreen() {
         socket.on("toggle-video", ({ enabled }) => {
             setRemoteVideoEnabled(enabled);
         });
-
     }, [socket]);
+
+
+
+    useEffect(() => {
+        const backAction = () => {
+            return true;
+        };
+
+        BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+
+        startCall();
+    }, []);
 
     // ⭐ Start Call
     const startCall = async () => {
@@ -262,7 +122,7 @@ export default function CallScreen() {
         const offer = await peerConnection.current?.createOffer();
         await peerConnection.current?.setLocalDescription(offer);
 
-        socket?.emit("offer", { roomId: "room1", offer });
+        socket?.emit("offer", { roomId: id, offer });
 
     };
 
@@ -291,7 +151,7 @@ export default function CallScreen() {
         await peerConnection.current?.setLocalDescription(answer);
 
         socket?.emit("answer", {
-            roomId: "room1",
+            roomId: id,
             answer
         });
 
@@ -324,7 +184,7 @@ export default function CallScreen() {
         setVideoEnabled(enabled);
 
         socket?.emit("toggle-video", {
-            roomId: "room1",
+            roomId: id,
             enabled
         });
 
@@ -334,15 +194,16 @@ export default function CallScreen() {
 
         localStream?.getTracks().forEach(track => track.stop());
         peerConnection.current?.close();
+        peerConnection.current = null;
 
         setLocalStream(null);
         setRemoteStream(null);
+        router.back();
     };
 
     const isVideoActive = () => {
         return remoteVideoEnabled && remoteStream;
     };
-
     return (
         <View style={styles.container}>
 
@@ -369,13 +230,8 @@ export default function CallScreen() {
                 />
             )}
 
-            {/* ⭐ Incoming Call UI */}
-            {incomingCall && (
-                <View style={styles.callBox}>
-
-                    <Text style={{ color: "white", fontSize: 18 }}>
-                        Incoming Call...
-                    </Text>
+            {incomingCall ? (
+                <View style={styles.controls}>
 
                     <View style={{ flexDirection: "row", marginTop: 20 }}>
 
@@ -383,23 +239,20 @@ export default function CallScreen() {
                             style={[styles.btn, { backgroundColor: "green" }]}
                             onPress={acceptCall}
                         >
-                            <Text style={{ color: "white" }}>Accept</Text>
+                            <Ionicons name="call-outline" size={24} color="white" />
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                            style={[styles.btn, { backgroundColor: "red", marginLeft: 20 }]}
+                            style={[styles.btn, { backgroundColor: "red", marginLeft: 50 }]}
                             onPress={rejectCall}
                         >
-                            <Text style={{ color: "white" }}>Decline</Text>
+                            <AntDesign name="close" size={24} color="white" />
                         </TouchableOpacity>
 
                     </View>
 
                 </View>
-            )}
-
-            {/* ⭐ Controls */}
-            <View style={styles.controls}>
+            ) : (<View style={styles.controls}>
 
                 <TouchableOpacity style={styles.btn} onPress={toggleMute}>
                     <Ionicons
@@ -421,11 +274,7 @@ export default function CallScreen() {
                     <Ionicons name="call" size={24} color="white" />
                 </TouchableOpacity>
 
-            </View>
-
-            <TouchableOpacity style={styles.startBtn} onPress={startCall}>
-                <Text style={{ color: "white" }}>Start Call</Text>
-            </TouchableOpacity>
+            </View>)}
 
         </View>
     );
@@ -511,3 +360,14 @@ const styles = StyleSheet.create({
     }
 
 });
+// import { router } from 'expo-router'
+// import React from 'react'
+// import { Pressable, Text } from 'react-native'
+
+// export default function Call() {
+//     return (
+//         <Pressable onPress={() => router.back()}>
+//             <Text>Call</Text>
+//         </Pressable>
+//     )
+// }
