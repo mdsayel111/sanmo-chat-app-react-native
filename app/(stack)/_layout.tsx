@@ -10,11 +10,17 @@ import { COLORS } from "@/constants/style";
 
 export default function TabLayout() {
     const { auth, loading } = useAuth();
+    const pathname = usePathname();
 
-    const hideRoutes = ["/call", "/profile-update"];
-    const shouldHideTab = hideRoutes.some(route =>
-        pathname === route
-    );
+    const hideRoutes = [
+        /^\/call$/,
+        /^\/profile-update$/,
+        /^\/chat(\/.*)?$/,
+    ];
+
+    const shouldHideTab = hideRoutes.some((regex) => regex.test(pathname));
+    console.log(shouldHideTab, "show tab")
+
 
     if (loading) {
         return <></>
@@ -30,7 +36,7 @@ export default function TabLayout() {
         return <Redirect href={"/profile-update"} />
     }
 
-    const pathname = usePathname();
+
 
     return (
         <>
