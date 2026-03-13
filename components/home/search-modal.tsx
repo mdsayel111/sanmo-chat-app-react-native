@@ -26,7 +26,7 @@ export default function SearchModal({ chats, setSearchModalVisible, searchModalV
             const res = await axios.get("/chat/search-chats?searchQuery=" + text);
             setSearchChats(res.data.data);
         } catch (error: any) {
-            console.log(error.response?.data?.message);
+            console.error(error.response?.data?.message);
         }
     };
 

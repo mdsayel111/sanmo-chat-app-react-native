@@ -1,10 +1,13 @@
 import Header from "@/components/shared/header/header";
 import PrimaryWrapper from "@/components/shared/primary-wrapper";
 import BackButton from "@/components/ui/back-button";
+import UserRenderItem from "@/components/users/user-render-item";
 import { COLORS } from "@/constants/style";
+import { useAuthAxios } from "@/hooks/use-auth-axios";
+import { TUser } from "@/types/user-type";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Image,
@@ -68,18 +71,18 @@ const DATA: Contact[] = [
 ];
 
 const ContactsScreen = () => {
-  const renderItem = ({ item }: { item: Contact }) => (
-    <View style={styles.row}>
-      <Image source={{ uri: item.avatar }} style={styles.avatar} />
-
-      <View>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.subtitle}>{item.subtitle}</Text>
-      </View>
-    </View>
-  );
 
   const sections = Array.from(new Set(DATA.map((c) => c.section)));
+  const [users, setUsers] = useState<TUser[]>([]);
+  const axios = useAuthAxios();
+
+  useEffect(() => {
+    axios.get("/user/all-users").then((res) => {
+      setUsers(res.data.data);
+    });
+  }, []);
+
+  console.log(users,"users")
 
   return (
     <View style={styles.container}>
@@ -87,16 +90,10 @@ const ContactsScreen = () => {
 
       <PrimaryWrapper>
         <FlatList
-          data={sections}
-          keyExtractor={(section) => section}
-          renderItem={({ item: section }) => (
-            <View>
-              <Text style={styles.sectionHeader}>{section}</Text>
-
-              {DATA.filter((c) => c.section === section).map((contact) => (
-                <View key={contact.id}>{renderItem({ item: contact })}</View>
-              ))}
-            </View>
+          data={users}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <UserRenderItem item={item} />
           )}
         />
       </PrimaryWrapper>
@@ -110,41 +107,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.primary,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 10,
-  },
-
-  sectionHeader: {
-    fontSize: 14,
-    fontWeight: "600",
-    marginTop: 10,
-    marginBottom: 6,
-  },
-
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-  },
-
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    marginRight: 12,
-  },
-
-  name: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-
-  subtitle: {
-    fontSize: 13,
-    color: "#888",
-    marginTop: 2,
   },
 });

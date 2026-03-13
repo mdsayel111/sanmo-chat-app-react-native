@@ -95,7 +95,7 @@ const ChatScreen: React.FC = () => {
                 setId(res?.data?.data?.chat?._id);
                 setType(res?.data?.data?.chat?.type);
             } catch (error: any) {
-                console.log(error.response?.data?.message);
+                console.error(error.response?.data?.message);
             }
         };
     };
@@ -145,7 +145,7 @@ const ChatScreen: React.FC = () => {
 
             {/* Messages */}
             {
-                messages.length > 0 ? (
+                messages?.length > 0 ? (
                     <FlatList
                         data={messages}
                         renderItem={renderItem}

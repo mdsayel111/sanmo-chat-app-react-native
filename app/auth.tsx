@@ -29,8 +29,6 @@ export default function Auth() {
                 phone,
             });
 
-            console.log(res.data)
-
             router.push({
                 pathname: "/verify-otp",
                 params: { phone },

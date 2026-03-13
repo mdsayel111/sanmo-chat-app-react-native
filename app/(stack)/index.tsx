@@ -1,49 +1,27 @@
+import ChatRenderItem from "@/components/home/chat-render-item/chat-render-item";
 import SearchModal from "@/components/home/search-modal";
 import Header from "@/components/shared/header/header";
 import NoData from "@/components/shared/no-data";
 import PrimaryWrapper from "@/components/shared/primary-wrapper";
-import { BASE_URL } from "@/config";
 import { COLORS } from "@/constants/style";
 import { useAuth } from "@/context/auth-context";
 import { useSocket } from "@/context/socket-context";
 import { withAuth } from "@/HOF/auth-provider";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
-import globalStyles from "@/styles";
+import { TChat } from "@/types/chat-type";
 import { TMessage } from "@/types/message-type";
-import { formatRelativeTime } from "@/utils/date";
-import { Feather, Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { TUser } from "@/types/user-type";
+import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Image,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
   View
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import SwipeableItem from "react-native-swipeable-item";
 
-type TMember = {
-  _id: string;
-  name: string;
-  image: string;
-}
-
-interface TChat {
-  _id: string;
-  name: string;
-  message: string;
-  time: string;
-  unread?: number;
-  image: string;
-  online?: boolean;
-  lastMessage: TMessage;
-  type: string;
-  members: TMember[];
-}
 
 function HomeScreen() {
   const { auth } = useAuth();
@@ -51,66 +29,6 @@ function HomeScreen() {
   const [searchModalVisible, setSearchModalVisible] = useState(false);
   const [chats, setChats] = useState<TChat[]>([]);
   const axios = useAuthAxios();
-  const renderRightActions = () => {
-    return (
-      <View style={styles.rightActions}>
-        <TouchableOpacity style={styles.bellButton}>
-          <Ionicons name="notifications-outline" size={20} color="white" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.deleteButton}>
-          <Feather name="trash-2" size={20} color="white" />
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  const renderItem = ({ item }: { item: TChat }) => {
-    return (
-      <SwipeableItem
-        item={item}
-        renderUnderlayLeft={renderRightActions}
-        snapPointsLeft={[100]}
-        overSwipe={30}
-      >
-        <Pressable
-          onPress={() => {
-            router.push({
-              pathname: "/chat/[type]/[id]",
-              params: {
-                type: item.type,
-                id: item._id,
-              },
-            });
-          }}
-          style={styles.chatItem}
-        >
-          <View>
-            <Image source={{ uri: BASE_URL + item.image }} style={styles.avatar} />
-            {item.online && <View style={styles.onlineDot} />}
-          </View>
-
-          <View style={{ flex: 1, marginLeft: 12 }}>
-            <Text style={styles.name}>{item.name}</Text>
-            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4, gap: 6 }}>
-              <Text style={styles.message} numberOfLines={1}>
-                {item?.lastMessage?.text || "No messages yet"}
-              </Text>
-              <Text style={styles.time}>{formatRelativeTime(item?.lastMessage?.createdAt)}</Text>
-            </View>
-          </View>
-
-          <View style={{ alignItems: "flex-end" }}>
-            {item.unread && (
-              <View style={styles.unreadBadge}>
-                <Text style={styles.unreadText}>{item.unread}</Text>
-              </View>
-            )}
-          </View>
-        </Pressable>
-      </SwipeableItem>
-    );
-  };
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -145,7 +63,7 @@ function HomeScreen() {
   const formatChats = (chats: TChat[]) => {
     return chats.map((item: TChat) => {
       if (item.type === "private") {
-        const otherUser = item?.members.find((member: TMember) => member._id !== auth?.user?._id) as TMember;
+        const otherUser = item?.members.find((member: TUser) => member._id !== auth?.user?._id) as TUser;
         item.image = otherUser.image;
         item.name = otherUser.name;
       }
@@ -190,7 +108,7 @@ function HomeScreen() {
             <FlatList
               data={formatChats(chats)}
               keyExtractor={(item) => item._id}
-              renderItem={renderItem}
+              renderItem={({ item }) => <ChatRenderItem item={item} />}
               contentContainerStyle={{ paddingBottom: 20, gap: 10 }}
               showsVerticalScrollIndicator={false}
             />
@@ -199,7 +117,7 @@ function HomeScreen() {
           )
         }
       </PrimaryWrapper>
-      <SearchModal chats={chats} setSearchModalVisible={setSearchModalVisible} searchModalVisible={searchModalVisible} renderItem={renderItem} />
+      <SearchModal chats={chats} setSearchModalVisible={setSearchModalVisible} searchModalVisible={searchModalVisible} renderItem={ChatRenderItem} />
     </View>
   );
 }
@@ -233,90 +151,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 12,
     marginTop: 6,
-  },
-  chatItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#f3f3f3",
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    borderRadius: 15,
-  },
-  avatar: {
-    width: 55,
-    height: 55,
-    borderRadius: 30,
-  },
-  onlineDot: {
-    position: "absolute",
-    bottom: 5,
-    right: 5,
-    width: 12,
-    height: 12,
-    backgroundColor: "#00C851",
-    borderRadius: 6,
-    borderWidth: 2,
-    borderColor: "white",
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  message: {
-    color: "#777",
-    fontSize: 16,
-  },
-  time: {
-    fontSize: 13,
-    color: "green",
-  },
-  sender: {
-    fontSize: 16,
-    color: "green",
-    marginRight: 4,
-  },
-  unreadBadge: {
-    backgroundColor: "#FF3B30",
-    borderRadius: 11,
-    height: 22,
-    width: 22,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 6,
-  },
-  unreadText: {
-    color: "white",
-    fontSize: 12,
-  },
-  rightActions: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    height: "100%",
-    gap: 5,
-    paddingHorizontal: 10,
-  },
-  bellButton: {
-    backgroundColor: COLORS.primary,
-    width: 40,
-    height: 40,
-    borderRadius: "50%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  deleteButton: {
-    backgroundColor: "#FF3B30",
-    width: 40,
-    height: 40,
-    borderRadius: "50%",
-    justifyContent: "center",
-    alignItems: "center",
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-  separator: {
-    height: 1,
-    backgroundColor: "#F0F0F0",
   },
 });
 
