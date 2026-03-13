@@ -22,17 +22,19 @@ export default function RootLayout() {
 }
 
 const Children = () => {
-  return (<SafeAreaProvider>
-    <SafeAreaView style={{ flex: 1 }} >
-      <StatusBar style="light" backgroundColor="#0f3d33" />
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-        </Stack>
-      </GestureHandlerRootView>
-    </SafeAreaView>
-  </SafeAreaProvider>)
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1 }} >
+        <StatusBar style="light" backgroundColor="#0f3d33" />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+          </Stack>
+        </GestureHandlerRootView>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  )
 }

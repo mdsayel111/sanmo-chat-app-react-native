@@ -5,9 +5,9 @@ import React from "react";
 import { useAuth } from "@/context/auth-context";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Feather from '@expo/vector-icons/Feather';
 
 export default function TabLayout() {
-    const pathname = usePathname();
     const { auth, loading } = useAuth();
 
     const hideRoutes = ["/call", "/profile-update"];
@@ -30,6 +30,8 @@ export default function TabLayout() {
         return <Redirect href={"/profile-update"} />
     }
 
+    const pathname = usePathname();
+
     return (
         <>
             <Stack
@@ -42,10 +44,46 @@ export default function TabLayout() {
 
             {!shouldHideTab && (
                 <View style={styles.bottomTab}>
-                    <TabItem icon="chatbubble-outline" label="Message" navigateTo="/" />
-                    <TabItem icon="call-outline" label="Calls" navigateTo="/calls" />
-                    <TabItem icon="list-outline" label="Contacts" navigateTo="/contacts" size={25} />
-                    <TabItem icon="settings-outline" label="Settings" navigateTo="/settings" size={25} />
+                    <TabItem
+                        icon={<Ionicons
+                            name={"chatbubble-outline"}
+                            size={25}
+                            color={pathname === "/" ? "#0f3d33" : "#888"}
+                        />}
+                        label="Message"
+                        navigateTo="/"
+                        isActive={pathname === "/"}
+                    />
+                    <TabItem icon={<Ionicons
+                        name={"call-outline"}
+                        size={25}
+                        color={pathname === "/calls" ? "#0f3d33" : "#888"}
+                    />}
+                        label="Calls"
+                        navigateTo="/calls"
+                        isActive={pathname === "/calls"}
+                    />
+                    <TabItem
+                        icon={
+                            <Feather name="users"
+                                size={24}
+                                color={pathname === "/contacts" ? "#0f3d33" : "#888"}
+                            />
+                        }
+                        label="Users"
+                        navigateTo="/contacts"
+                        isActive={pathname === "/contacts"}
+                    />
+                    <TabItem
+                        icon={<Ionicons
+                            name={"settings-outline"}
+                            size={25}
+                            color={pathname === "/settings" ? "#0f3d33" : "#888"}
+                        />}
+                        label="Settings"
+                        navigateTo="/settings"
+                        isActive={pathname === "/settings"}
+                    />
                 </View>
             )}
         </>
@@ -56,23 +94,22 @@ const TabItem = ({
     icon,
     label,
     navigateTo,
-    size = 22,
+    isActive,
 }: {
     icon: any;
     label: string;
     navigateTo: string;
-    size?: number;
+    isActive?: boolean;
 }) => {
-    const pathname = usePathname();
-    const isActive = pathname === navigateTo;
     return (
         <TouchableOpacity activeOpacity={0.7} onPress={() => router.push(navigateTo as any)}>
-            <View style={{ alignItems: "center", height: 45 }}>
-                <Ionicons
+            <View style={{ alignItems: "center", height: 45, }}>
+                {/* <Ionicons
                     name={icon}
                     size={size}
                     color={isActive ? "#0f3d33" : "#888"}
-                />
+                /> */}
+                {icon}
                 <Text
                     style={{
                         fontSize: 12,
