@@ -75,12 +75,6 @@ export default function ProfileUpdateScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Dark Header */}
-      <View style={styles.header}>
-        <Text style={globalStyles.pageHeader}>Update Profile</Text>
-      </View>
-
-      {/* White Card Form */}
       <PrimaryWrapper>
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
           <View style={{ flex: 1 }}>
@@ -128,55 +122,6 @@ export default function ProfileUpdateScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0f3d33", // dark greenish theme
-  },
-  header: {
-    paddingVertical: 25,
-    alignItems: "center",
-  },
-  headerTitle: {
-    color: "#fff",
-    fontSize: 22,
-    fontWeight: "600",
-  },
-  card: {
-    flex: 1,
-    backgroundColor: "#F4F4F4",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    padding: 20,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: "600",
-    marginBottom: 6,
-    marginTop: 15,
-    color: "#333",
-  },
-  input: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    paddingHorizontal: 15,
-    paddingVertical: 14,
-    fontSize: 14,
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
-  },
-  multilineInput: {
-    height: 100,
-    textAlignVertical: "top",
-  },
-  button: {
-    marginTop: "auto",
     backgroundColor: "#0f3d33",
-    paddingVertical: 16,
-    borderRadius: 14,
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
   },
 });

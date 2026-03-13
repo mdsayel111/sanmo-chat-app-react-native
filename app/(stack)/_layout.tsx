@@ -22,7 +22,6 @@ export default function TabLayout() {
         return <Redirect href="/auth" />;
     }
 
-
     const isNewUser =
         new Date(auth?.user.createdAt).getTime() ===
         new Date(auth?.user.updatedAt).getTime();
@@ -38,9 +37,7 @@ export default function TabLayout() {
                 screenOptions={{
                     headerShown: false,
                 }}
-            >
-                {/* <Stack.Screen name="call" options={{ presentation: 'modal', title: 'Modal' }} /> */}
-            </Stack>
+            />
 
             {!shouldHideTab && (
                 <View style={styles.bottomTab}>
@@ -71,8 +68,8 @@ export default function TabLayout() {
                             />
                         }
                         label="Users"
-                        navigateTo="/contacts"
-                        isActive={pathname === "/contacts"}
+                        navigateTo="/users"
+                        isActive={pathname === "/users"}
                     />
                     <TabItem
                         icon={<Ionicons

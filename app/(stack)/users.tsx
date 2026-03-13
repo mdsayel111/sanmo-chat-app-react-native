@@ -1,12 +1,14 @@
+import BackButton from "@/components/ui/back-button";
 import { Feather, Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React from "react";
 import {
-    FlatList,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
 
 interface Contact {
@@ -81,22 +83,15 @@ const ContactsScreen = () => {
 
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.circleBtn}>
-          <Feather name="search" size={20} color="#fff" />
-        </TouchableOpacity>
-
-        <Text style={styles.title}>Contacts</Text>
-
-        <TouchableOpacity style={styles.circleBtn}>
-          <Ionicons name="person-add-outline" size={20} color="#fff" />
-        </TouchableOpacity>
+        <BackButton onPress={() => router.back()} />
+        <Text style={styles.title}>All Users</Text>
+        <View />
       </View>
 
       {/* Sheet */}
       <View style={styles.sheet}>
-        <View style={styles.dragIndicator} />
 
-        <Text style={styles.sectionTitle}>My Contact</Text>
+        <Text style={styles.sectionTitle}>All Users</Text>
 
         <FlatList
           data={sections}
@@ -139,16 +134,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 
-  circleBtn: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    borderWidth: 1,
-    borderColor: "#ffffff40",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
   sheet: {
     flex: 1,
     backgroundColor: "#fff",
@@ -156,15 +141,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     paddingHorizontal: 16,
     paddingTop: 10,
-  },
-
-  dragIndicator: {
-    alignSelf: "center",
-    width: 40,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: "#E0E0E0",
-    marginBottom: 12,
   },
 
   sectionTitle: {

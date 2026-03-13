@@ -1,16 +1,18 @@
-import DraggableModal from "@/components/shared/draggable-modal";
+import SearchModal from "@/components/home/search-modal";
+import Header from "@/components/shared/header/header";
 import NoData from "@/components/shared/no-data";
 import PrimaryWrapper from "@/components/shared/primary-wrapper";
-import TextInput from "@/components/ui/text-input";
 import { BASE_URL } from "@/config";
 import { useAuth } from "@/context/auth-context";
+import { useSocket } from "@/context/socket-context";
 import { withAuth } from "@/HOF/auth-provider";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import globalStyles from "@/styles";
+import { TMessage } from "@/types/message-type";
+import { formatRelativeTime } from "@/utils/date";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import EvilIcons from '@expo/vector-icons/EvilIcons';
 import {
   FlatList,
   Image,
@@ -22,10 +24,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SwipeableItem from "react-native-swipeable-item";
-import SearchModal from "@/components/home/search-modal";
-import { formatRelativeTime } from "@/utils/date";
-import { TMessage } from "@/types/message-type";
-import { useSocket } from "@/context/socket-context";
 
 type TMember = {
   _id: string;
@@ -157,24 +155,14 @@ function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => setSearchModalVisible(true)}>
+      <Header
+        title="Home"
+        leftButton={<TouchableOpacity
+          onPress={() => setSearchModalVisible(true)}
+        >
           <Feather name="search" size={26} color="white" />
-        </TouchableOpacity>
-
-        <Text style={globalStyles.pageHeader}>Home</Text>
-
-        <Pressable onPress={() => router.navigate("/my-profile")}>
-          <Image
-            source={{
-              uri: BASE_URL as string + auth?.user?.image,
-            }}
-            style={styles.profile}
-          />
-        </Pressable>
-      </View>
+        </TouchableOpacity>}
+      />
 
       {/* Stories */}
       <View style={styles.storyContainer}>
@@ -223,18 +211,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0f3d33",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-  },
-  profile: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
   },
   storyContainer: {
     paddingLeft: 15,
