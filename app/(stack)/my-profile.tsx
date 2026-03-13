@@ -4,6 +4,7 @@ import Button from "@/components/ui/button";
 import ImageInput from "@/components/ui/image-input";
 import TextInput from "@/components/ui/text-input";
 import { BASE_URL } from "@/config";
+import { COLORS } from "@/constants/style";
 import { useAuth } from "@/context/auth-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import * as ImagePicker from "expo-image-picker";
@@ -138,7 +139,7 @@ export default function UserProfileUpdateScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#0f3d33",
+        backgroundColor: COLORS.primary,
         alignItems: "center",
     },
 

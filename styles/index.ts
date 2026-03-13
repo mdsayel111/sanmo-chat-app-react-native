@@ -5,7 +5,6 @@ const globalStyles = StyleSheet.create({
     backgroundColor: "#ccc",
     opacity: 0.5,
   },
-
 });
 
 export default globalStyles;

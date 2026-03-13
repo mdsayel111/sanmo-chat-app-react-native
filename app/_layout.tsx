@@ -6,6 +6,7 @@ import { AuthProvider } from '@/context/auth-context';
 import { SocketProvider } from '@/context/socket-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS } from '@/constants/style';
 
 export const unstable_settings = {
   anchor: '(protected)',
@@ -25,7 +26,7 @@ const Children = () => {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1 }} >
-        <StatusBar style="light" backgroundColor="#0f3d33" />
+        <StatusBar style="light" backgroundColor={COLORS.primary} />
         <GestureHandlerRootView style={{ flex: 1 }}>
           <Stack
             screenOptions={{

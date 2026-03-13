@@ -3,6 +3,7 @@ import Header from "@/components/shared/header/header";
 import NoData from "@/components/shared/no-data";
 import PrimaryWrapper from "@/components/shared/primary-wrapper";
 import { BASE_URL } from "@/config";
+import { COLORS } from "@/constants/style";
 import { useAuth } from "@/context/auth-context";
 import { useSocket } from "@/context/socket-context";
 import { withAuth } from "@/HOF/auth-provider";
@@ -154,7 +155,7 @@ function HomeScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={["top"]}>
+    <View style={styles.container}>
       <Header
         title="Home"
         leftButton={<TouchableOpacity
@@ -199,7 +200,7 @@ function HomeScreen() {
         }
       </PrimaryWrapper>
       <SearchModal chats={chats} setSearchModalVisible={setSearchModalVisible} searchModalVisible={searchModalVisible} renderItem={renderItem} />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -210,7 +211,8 @@ export default withAuth(HomeScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0f3d33",
+    backgroundColor: COLORS.primary,
+    justifyContent: "flex-start"
   },
   storyContainer: {
     paddingLeft: 15,
@@ -295,7 +297,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   bellButton: {
-    backgroundColor: "#0f3d33",
+    backgroundColor: COLORS.primary,
     width: 40,
     height: 40,
     borderRadius: "50%",

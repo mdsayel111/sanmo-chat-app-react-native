@@ -1,4 +1,5 @@
 import PrimaryWrapper from "@/components/shared/primary-wrapper";
+import { COLORS } from "@/constants/style";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
 import {
@@ -56,46 +57,46 @@ export default function UserProfileScreen() {
                 <ActionBtn icon="phone" />
                 <ActionBtn icon="more-horizontal" />
             </View>
-            
+
             <PrimaryWrapper>
-                <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
-                                   
-                <InfoRow label="Display Name" value="Jhon Abraham" />
-                <InfoRow
-                    label="Email Address"
-                    value="jhonabraham20@gmail.com"
-                />
-                <InfoRow
-                    label="Address"
-                    value="33 street west subidbazar, sylhet"
-                />
-                <InfoRow label="Phone Number" value="(320) 555-0104" />
+                <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
 
-                {/* Media Shared */}
-                <View style={styles.mediaHeader}>
-                    <Text style={styles.label}>Media Shared</Text>
-                    <Text style={styles.viewAll}>View All</Text>
-                </View>
+                    <InfoRow label="Display Name" value="Jhon Abraham" />
+                    <InfoRow
+                        label="Email Address"
+                        value="jhonabraham20@gmail.com"
+                    />
+                    <InfoRow
+                        label="Address"
+                        value="33 street west subidbazar, sylhet"
+                    />
+                    <InfoRow label="Phone Number" value="(320) 555-0104" />
 
-                <View style={styles.mediaRow}>
-                    <Image
-                        source={{ uri: "https://picsum.photos/200/200?1" }}
-                        style={styles.media}
-                    />
-                    <Image
-                        source={{ uri: "https://picsum.photos/200/200?2" }}
-                        style={styles.media}
-                    />
-                    <View style={styles.mediaOverlay}>
+                    {/* Media Shared */}
+                    <View style={styles.mediaHeader}>
+                        <Text style={styles.label}>Media Shared</Text>
+                        <Text style={styles.viewAll}>View All</Text>
+                    </View>
+
+                    <View style={styles.mediaRow}>
                         <Image
-                            source={{ uri: "https://picsum.photos/200/200?3" }}
+                            source={{ uri: "https://picsum.photos/200/200?1" }}
                             style={styles.media}
                         />
-                        <View style={styles.overlay}>
-                            <Text style={styles.overlayText}>255+</Text>
+                        <Image
+                            source={{ uri: "https://picsum.photos/200/200?2" }}
+                            style={styles.media}
+                        />
+                        <View style={styles.mediaOverlay}>
+                            <Image
+                                source={{ uri: "https://picsum.photos/200/200?3" }}
+                                style={styles.media}
+                            />
+                            <View style={styles.overlay}>
+                                <Text style={styles.overlayText}>255+</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
                 </ScrollView>
             </PrimaryWrapper>
         </View>
@@ -105,7 +106,7 @@ export default function UserProfileScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#0f3d33",
+        backgroundColor: COLORS.primary,
         alignItems: "center",
     },
 

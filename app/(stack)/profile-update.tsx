@@ -2,6 +2,7 @@ import PrimaryWrapper from "@/components/shared/primary-wrapper";
 import Button from "@/components/ui/button";
 import ImageInput from "@/components/ui/image-input";
 import TextInput from "@/components/ui/text-input";
+import { COLORS } from "@/constants/style";
 import { useAuth } from "@/context/auth-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import globalStyles from "@/styles";
@@ -122,6 +123,6 @@ export default function ProfileUpdateScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0f3d33",
+    backgroundColor: COLORS.primary,
   },
 });

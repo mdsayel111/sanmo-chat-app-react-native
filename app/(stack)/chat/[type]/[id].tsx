@@ -1,6 +1,7 @@
 import NoData from "@/components/shared/no-data";
 import BackButton from "@/components/ui/back-button";
 import { BASE_URL } from "@/config";
+import { COLORS } from "@/constants/style";
 import { useAuth } from "@/context/auth-context";
 import { useSocket } from "@/context/socket-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
         padding: 12,
         borderBottomWidth: 1,
         borderColor: "#eee",
-        backgroundColor: "#0f3d33",
+        backgroundColor: COLORS.primary,
         paddingTop: 10,
         paddingBottom: 17,
     },
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
     },
 
     outgoing: {
-        backgroundColor: "#0f3d33",
+        backgroundColor: COLORS.primary,
         alignSelf: "flex-end",
     },
 
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
     voiceContainer: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#0f3d33",
+        backgroundColor: COLORS.primary,
         padding: 10,
         borderRadius: 14,
         alignSelf: "flex-end",

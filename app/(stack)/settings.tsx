@@ -2,6 +2,7 @@ import PrimaryWrapper from "@/components/shared/primary-wrapper";
 import BackButton from "@/components/ui/back-button";
 import Button from "@/components/ui/button";
 import { BASE_URL } from "@/config";
+import { COLORS } from "@/constants/style";
 import { useAuth } from "@/context/auth-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
@@ -115,17 +116,6 @@ const SettingsScreen = () => {
                         subtitle="Invite your friends to chat with you"
                     />
                 </View>
-                {/* <Pressable style={styles.logOutButton} onPress={logOut}>
-                    <Text
-                        style={{
-                            color: "white",
-                            textAlign: "center",
-                            fontWeight: "600",
-                        }}
-                    >
-                        Log Out
-                    </Text>
-                </Pressable> */}
                 <Button text="Log Out" onPress={logOut} containerStyles={{ marginBottom: 20, backgroundColor: "red" }} />
             </PrimaryWrapper>
         </View>
@@ -137,7 +127,7 @@ export default SettingsScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#0f3d33",
+        backgroundColor: COLORS.primary,
     },
 
     header: {

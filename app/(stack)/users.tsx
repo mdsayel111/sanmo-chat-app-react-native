@@ -1,4 +1,7 @@
+import Header from "@/components/shared/header/header";
+import PrimaryWrapper from "@/components/shared/primary-wrapper";
 import BackButton from "@/components/ui/back-button";
+import { COLORS } from "@/constants/style";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
@@ -80,19 +83,9 @@ const ContactsScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Header title="All Users" />
 
-      {/* Header */}
-      <View style={styles.header}>
-        <BackButton onPress={() => router.back()} />
-        <Text style={styles.title}>All Users</Text>
-        <View />
-      </View>
-
-      {/* Sheet */}
-      <View style={styles.sheet}>
-
-        <Text style={styles.sectionTitle}>All Users</Text>
-
+      <PrimaryWrapper>
         <FlatList
           data={sections}
           keyExtractor={(section) => section}
@@ -106,7 +99,7 @@ const ContactsScreen = () => {
             </View>
           )}
         />
-      </View>
+      </PrimaryWrapper>
     </View>
   );
 };
@@ -116,33 +109,8 @@ export default ContactsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0f3d33",
+    backgroundColor: COLORS.primary,
   },
-
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 20,
-  },
-
-  title: {
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "600",
-  },
-
-  sheet: {
-    flex: 1,
-    backgroundColor: "#fff",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingHorizontal: 16,
-    paddingTop: 10,
-  },
-
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",

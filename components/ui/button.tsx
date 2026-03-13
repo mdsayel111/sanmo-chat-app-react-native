@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/style";
 import React from "react";
 import {
   TouchableOpacity,
@@ -30,7 +31,7 @@ export default function Button({
     <TouchableOpacity
       style={[
         styles.button,
-        { backgroundColor: isDisabled ? "#A0A0A0" : "#0f3d33" },
+        { backgroundColor: isDisabled ? "#A0A0A0" : COLORS.primary },
         containerStyles,
       ]}
       onPress={onPress}

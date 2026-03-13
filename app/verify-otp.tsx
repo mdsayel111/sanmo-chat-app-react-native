@@ -1,4 +1,5 @@
 import Button from "@/components/ui/button";
+import { COLORS } from "@/constants/style";
 import { useAuth } from "@/context/auth-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import { router, useLocalSearchParams } from "expo-router";
@@ -125,7 +126,7 @@ export default function VerifyOtp() {
         onPress={resendOtp}
         style={{ marginTop: 16 }}
       >
-        <Text style={{ color: timer > 0 ? "#aaa" : "#0f3d33" }}>
+        <Text style={{ color: timer > 0 ? "#aaa" : COLORS.primary }}>
           {timer > 0 ? `Resend in ${timer}s` : "Resend OTP"}
         </Text>
       </TouchableOpacity>
@@ -151,10 +152,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
   },
-  button: {
-    backgroundColor: "#0f3d33",
-    padding: 16,
-    borderRadius: 12,
-  },
-  buttonText: { color: "white", textAlign: "center", fontWeight: "600" },
 });

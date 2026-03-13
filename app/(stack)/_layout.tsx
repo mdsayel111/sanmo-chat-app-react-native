@@ -6,6 +6,7 @@ import { useAuth } from "@/context/auth-context";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Feather from '@expo/vector-icons/Feather';
+import { COLORS } from "@/constants/style";
 
 export default function TabLayout() {
     const { auth, loading } = useAuth();
@@ -45,7 +46,7 @@ export default function TabLayout() {
                         icon={<Ionicons
                             name={"chatbubble-outline"}
                             size={25}
-                            color={pathname === "/" ? "#0f3d33" : "#888"}
+                            color={pathname === "/" ? COLORS.primary : "#888"}
                         />}
                         label="Message"
                         navigateTo="/"
@@ -54,7 +55,7 @@ export default function TabLayout() {
                     <TabItem icon={<Ionicons
                         name={"call-outline"}
                         size={25}
-                        color={pathname === "/calls" ? "#0f3d33" : "#888"}
+                        color={pathname === "/calls" ? COLORS.primary : "#888"}
                     />}
                         label="Calls"
                         navigateTo="/calls"
@@ -64,7 +65,7 @@ export default function TabLayout() {
                         icon={
                             <Feather name="users"
                                 size={24}
-                                color={pathname === "/contacts" ? "#0f3d33" : "#888"}
+                                color={pathname === "/contacts" ? COLORS.primary : "#888"}
                             />
                         }
                         label="Users"
@@ -75,7 +76,7 @@ export default function TabLayout() {
                         icon={<Ionicons
                             name={"settings-outline"}
                             size={25}
-                            color={pathname === "/settings" ? "#0f3d33" : "#888"}
+                            color={pathname === "/settings" ? COLORS.primary : "#888"}
                         />}
                         label="Settings"
                         navigateTo="/settings"
@@ -101,16 +102,11 @@ const TabItem = ({
     return (
         <TouchableOpacity activeOpacity={0.7} onPress={() => router.push(navigateTo as any)}>
             <View style={{ alignItems: "center", height: 45, }}>
-                {/* <Ionicons
-                    name={icon}
-                    size={size}
-                    color={isActive ? "#0f3d33" : "#888"}
-                /> */}
                 {icon}
                 <Text
                     style={{
                         fontSize: 12,
-                        color: isActive ? "#0f3d33" : "#888",
+                        color: isActive ? COLORS.primary : "#888",
                     }}
                 >
                     {label}

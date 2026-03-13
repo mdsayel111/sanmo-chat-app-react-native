@@ -1,4 +1,5 @@
 import Button from "@/components/ui/button";
+import { COLORS } from "@/constants/style";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import globalStyles from "@/styles";
 import { router } from "expo-router";
@@ -72,11 +73,4 @@ const styles = StyleSheet.create({
         padding: 14,
         fontSize: 16,
     },
-    button: {
-        backgroundColor: "#0f3d33",
-        padding: 16,
-        borderRadius: 12,
-        marginTop: 20,
-    },
-    buttonText: { color: "white", textAlign: "center", fontWeight: "600" },
 });
