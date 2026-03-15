@@ -19,7 +19,6 @@ export default function TabLayout() {
     ];
 
     const shouldHideTab = hideRoutes.some((regex) => regex.test(pathname));
-    console.log(shouldHideTab, "show tab")
 
 
     if (loading) {

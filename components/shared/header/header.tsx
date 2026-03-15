@@ -19,7 +19,7 @@ export default function Header(
     return (
         <View style={styles.header}>
             {leftButton}
-            <HeaderTitle title={title} />
+            <HeaderTitle title={title} extraStyles={{ marginLeft: -26 }} />
             {rightButton || <View />}
         </View>
     )

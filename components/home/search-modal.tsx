@@ -6,7 +6,6 @@ import EvilIcons from '@expo/vector-icons/EvilIcons';
 import React, { useEffect, useState } from "react";
 import {
     FlatList,
-    ListRenderItem,
     StyleSheet,
     Text,
     View
@@ -32,7 +31,7 @@ export default function SearchModal({ chats, setSearchModalVisible, searchModalV
 
     useEffect(() => {
         handleSearch("")
-    }, []);
+    }, [axios]);
     return (
         <DraggableModal visible={searchModalVisible} onClose={() => setSearchModalVisible(false)}>
             <View style={styles.searchModal}>
@@ -53,7 +52,7 @@ export default function SearchModal({ chats, setSearchModalVisible, searchModalV
                             />
                         </>
                     ) : (
-                        <NoData text="No reult found!"/>
+                        <NoData text="No reult found!" />
                     )
                 }
             </View>

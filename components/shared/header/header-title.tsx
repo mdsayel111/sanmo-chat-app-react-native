@@ -3,11 +3,12 @@ import { StyleSheet, Text } from 'react-native';
 
 type TProps = {
   title: string;
+  extraStyles?: any;
 }
 
-export default function HeaderTitle({ title }: TProps) {
+export default function HeaderTitle({ title, extraStyles }: TProps) {
   return (
-    <Text style={styles.pageHeader}>{title}</Text>
+    <Text style={[styles?.pageHeader, extraStyles]}>{title}</Text>
   )
 }
 

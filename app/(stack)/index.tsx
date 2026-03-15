@@ -36,7 +36,7 @@ function HomeScreen() {
       setChats(res.data.data);
     };
     fetchChats();
-  }, []);
+  }, [axios]);
 
   // socket events listener
   useEffect(() => {

@@ -5,16 +5,14 @@ import TextInput from "@/components/ui/text-input";
 import { COLORS } from "@/constants/style";
 import { useAuth } from "@/context/auth-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
-import globalStyles from "@/styles";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
-  Alert,
-  StyleSheet,
-  Text,
-  View
+    Alert,
+    StyleSheet,
+    Text,
+    View
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 

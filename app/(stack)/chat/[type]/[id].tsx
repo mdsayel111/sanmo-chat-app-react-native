@@ -107,7 +107,7 @@ const ChatScreen: React.FC = () => {
             setChatInfo(res?.data?.data?.chat as TChatInfo);
         };
         fetchMessages();
-    }, []);
+    }, [axios]);
 
 
     // socket events listener

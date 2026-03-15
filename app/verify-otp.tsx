@@ -5,12 +5,12 @@ import { useAuthAxios } from "@/hooks/use-auth-axios";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
-  Alert,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 export default function VerifyOtp() {
@@ -91,7 +91,6 @@ export default function VerifyOtp() {
         phone,
       });
 
-      console.log(res?.data?.data)
     } catch (error: any) {
       Alert.alert(error.response?.data?.message);
     }

@@ -1,15 +1,12 @@
 import Button from "@/components/ui/button";
-import { COLORS } from "@/constants/style";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
-import globalStyles from "@/styles";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
     Alert,
     StyleSheet,
     Text,
-    TextInput,
-    TouchableOpacity
+    TextInput
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 

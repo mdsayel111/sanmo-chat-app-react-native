@@ -5,8 +5,7 @@ import { BASE_URL } from '@/config'
 import Avatar from '../shared/avatar'
 import { router } from 'expo-router'
 
-export default function UserRenderItem({ item }: { item: TUser }) {
-    console.log(item, "item")
+export default function UserRenderItem({ item, isOnline }: { item: TUser, isOnline?: boolean }) {
     return (
         <Pressable
             style={styles.row}
@@ -21,7 +20,7 @@ export default function UserRenderItem({ item }: { item: TUser }) {
             }}
         >
             {/* <Image source={{ uri: BASE_URL + item.image }} style={styles.avatar} /> */}
-            <Avatar uri={BASE_URL + item.image} />
+            <Avatar uri={BASE_URL + item.image} isOnline={isOnline} size={40} />
 
             <View>
                 <Text style={styles.name}>{item.name}</Text>
@@ -37,6 +36,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         paddingVertical: 10,
+        gap: 15,
     },
 
     name: {

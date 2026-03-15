@@ -33,7 +33,7 @@ const ChatRenderItem = ({ item }: { item: TChat }) => {
                 }}
                 style={styles.chatItem}
             >
-                <Avatar uri={BASE_URL + item.image} />
+                <Avatar uri={BASE_URL + item.image} size={45} />
 
                 <View style={{ flex: 1, marginLeft: 12 }}>
                     <Text style={styles.name}>{item.name}</Text>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         backgroundColor: "#f3f3f3",
-        paddingVertical: 12,
+        paddingVertical: 18,
         paddingHorizontal: 15,
         borderRadius: 15,
     },

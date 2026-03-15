@@ -7,6 +7,7 @@ import { SocketProvider } from '@/context/socket-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '@/constants/style';
+import { UsersProvider } from '@/context/user-context';
 
 export const unstable_settings = {
   anchor: '(protected)',
@@ -16,7 +17,9 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <SocketProvider>
-        <Children />
+        <UsersProvider>
+          <Children />
+        </UsersProvider>
       </SocketProvider>
     </AuthProvider>
   );
