@@ -117,7 +117,7 @@ function HomeScreen() {
           )
         }
       </PrimaryWrapper>
-      <SearchModal chats={chats} setSearchModalVisible={setSearchModalVisible} searchModalVisible={searchModalVisible} renderItem={ChatRenderItem} />
+      <SearchModal chats={chats} setSearchModalVisible={setSearchModalVisible} searchModalVisible={searchModalVisible}  />
     </View>
   );
 }

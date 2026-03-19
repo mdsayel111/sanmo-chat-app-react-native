@@ -123,7 +123,6 @@ const ChatScreen: React.FC = () => {
         };
     }, [socket, id]);
 
-
     return (
         <View style={styles.container}>
             {/* Header */}

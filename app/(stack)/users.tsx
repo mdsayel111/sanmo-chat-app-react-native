@@ -14,8 +14,6 @@ import {
 const ContactsScreen = () => {
 
   const { users } = useUsers();
-
-
   return (
     <View style={styles.container}>
       <Header title="All Users" />
@@ -25,7 +23,7 @@ const ContactsScreen = () => {
           data={users}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
-            <UserRenderItem item={item} isOnline={item.isActive} />
+            <UserRenderItem item={item} isOnline={item.isActive} type={item.chatType} id={item.chatId} />
           )}
         />
       </PrimaryWrapper>

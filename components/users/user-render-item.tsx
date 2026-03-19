@@ -1,11 +1,11 @@
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
-import React from 'react'
-import { TUser } from '@/types/user-type'
 import { BASE_URL } from '@/config'
-import Avatar from '../shared/avatar'
 import { router } from 'expo-router'
+import React from 'react'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import Avatar from '../shared/avatar'
 
-export default function UserRenderItem({ item, isOnline }: { item: TUser, isOnline?: boolean }) {
+export default function UserRenderItem({ item, isOnline, type, id }: { item: any, isOnline?: boolean, type?: string, id?: string }) {
+    console.log(type, id)
     return (
         <Pressable
             style={styles.row}
@@ -13,8 +13,8 @@ export default function UserRenderItem({ item, isOnline }: { item: TUser, isOnli
                 router.push({
                     pathname: "/chat/[type]/[id]",
                     params: {
-                        type: "private",
-                        id: item._id,
+                        type: type || item?.type as string,
+                        id: id || item._id,
                     },
                 });
             }}

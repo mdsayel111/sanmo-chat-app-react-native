@@ -10,12 +10,12 @@ import {
     Text,
     View
 } from "react-native";
+import ChatRenderItem from "./chat-render-item/chat-render-item";
 
-export default function SearchModal({ chats, setSearchModalVisible, searchModalVisible, renderItem }: {
+export default function SearchModal({ chats, setSearchModalVisible, searchModalVisible }: {
     chats: any[];
     setSearchModalVisible: (visible: boolean) => void;
     searchModalVisible: boolean;
-    renderItem: (item: any) => any;
 }) {
     const axios = useAuthAxios();
     const [searchChats, setSearchChats] = useState(chats);
@@ -46,7 +46,7 @@ export default function SearchModal({ chats, setSearchModalVisible, searchModalV
                             <FlatList
                                 data={searchChats}
                                 keyExtractor={(item) => item._id}
-                                renderItem={renderItem}
+                                renderItem={({ item }) => <ChatRenderItem item={item} />}
                                 contentContainerStyle={{ paddingBottom: 20, gap: 10 }}
                                 showsVerticalScrollIndicator={false}
                             />
