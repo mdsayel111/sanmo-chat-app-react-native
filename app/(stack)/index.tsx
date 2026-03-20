@@ -11,15 +11,12 @@ import { withAuth } from "@/HOF/auth-provider";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import { TChat } from "@/types/chat-type";
 import { TMessage } from "@/types/message-type";
-import { TUser } from "@/types/user-type";
 import { formatChats } from "@/utils/chat";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
-  Image,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View
 } from "react-native";
@@ -46,7 +43,7 @@ function HomeScreen() {
     if (!socket) return;
 
     socket.on("chat:receive", (chat: TChat) => {
-      setChats(prev => [formatChats([chat])[0], ...prev]);
+      setChats(prev => [formatChats([chat], users, auth)[0], ...prev]);
     });
 
     socket.on("message:receive", (message: TMessage) => {
