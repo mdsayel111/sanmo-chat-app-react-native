@@ -7,7 +7,6 @@ import React from "react";
 import {
   FlatList,
   StyleSheet,
-  Text,
   View
 } from "react-native";
 
@@ -22,8 +21,11 @@ const ContactsScreen = () => {
         <FlatList
           data={users}
           keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <UserRenderItem item={item} isOnline={item.isActive} type={item.chatType} id={item.chatId} />
+          renderItem={({ item }: { item: any }) => (
+            <UserRenderItem item={{
+              ...item,
+              
+            }} isOnline={item.isActive} type={item.chatType} id={item.chatId} />
           )}
         />
       </PrimaryWrapper>

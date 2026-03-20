@@ -4,6 +4,7 @@ import { BASE_URL } from "@/config";
 import { COLORS } from "@/constants/style";
 import { useAuth } from "@/context/auth-context";
 import { useSocket } from "@/context/socket-context";
+import { useUsers } from "@/context/user-context";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import { TMessage } from "@/types/message-type";
 import { Feather } from "@expo/vector-icons";
@@ -34,8 +35,11 @@ const ChatScreen: React.FC = () => {
     const axios = useAuthAxios();
     const { socket } = useSocket();
 
+    const { users } = useUsers()
+
     const [id, setId] = useState(params.id);
     const [type, setType] = useState(params.type);
+    const [isActive, setIsActive] = useState(false);
 
     const renderItem: ListRenderItem<TMessage> = ({ item }) => {
         if (item.type === "voice") {
@@ -123,6 +127,14 @@ const ChatScreen: React.FC = () => {
         };
     }, [socket, id]);
 
+    useEffect(() => {
+        let isActive = false;
+        if (type !== "user") {
+            isActive = users.find(u => chatInfo?._id === u._id)?.isActive || false
+        }
+        setIsActive(isActive);
+    }, [chatInfo]);
+
     return (
         <View style={styles.container}>
             {/* Header */}
@@ -134,7 +146,10 @@ const ChatScreen: React.FC = () => {
                 />
                 <View style={{ flex: 1 }}>
                     <Text style={styles.name}>{chatInfo?.name}</Text>
-                    <Text style={styles.status}>Active now</Text>
+                    {
+                        isActive && <Text style={styles.status}>Active now</Text>
+                    }
+                    {/* <Text style={styles.status}>Active now</Text> */}
                 </View>
                 <Feather name="phone" size={20} style={styles.headerIcon} onPress={() =>
                     router.push("/call")

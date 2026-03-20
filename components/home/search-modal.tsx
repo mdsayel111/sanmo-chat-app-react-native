@@ -2,6 +2,8 @@ import DraggableModal from "@/components/shared/draggable-modal";
 import NoData from "@/components/shared/no-data";
 import TextInput from "@/components/ui/text-input";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
+import { TChat } from "@/types/chat-type";
+import { formatChats } from "@/utils/chat";
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import React, { useEffect, useState } from "react";
 import {
@@ -12,13 +14,14 @@ import {
 } from "react-native";
 import ChatRenderItem from "./chat-render-item/chat-render-item";
 
-export default function SearchModal({ chats, setSearchModalVisible, searchModalVisible }: {
-    chats: any[];
+export default function SearchModal({ setSearchModalVisible, searchModalVisible, users, auth }: {
     setSearchModalVisible: (visible: boolean) => void;
     searchModalVisible: boolean;
+    users: any;
+    auth: any;
 }) {
     const axios = useAuthAxios();
-    const [searchChats, setSearchChats] = useState(chats);
+    const [searchChats, setSearchChats] = useState<(TChat & { isOnline?: boolean })[]>([]);
 
     const handleSearch = async (text: string) => {
         try {
@@ -44,9 +47,9 @@ export default function SearchModal({ chats, setSearchModalVisible, searchModalV
                         <>
                             <Text style={styles.sectionTitle}>Recent</Text>
                             <FlatList
-                                data={searchChats}
+                                data={formatChats(searchChats, users, auth)}
                                 keyExtractor={(item) => item._id}
-                                renderItem={({ item }) => <ChatRenderItem item={item} />}
+                                renderItem={({ item }) => <ChatRenderItem item={item} isOnline={item.isOnline} />}
                                 contentContainerStyle={{ paddingBottom: 20, gap: 10 }}
                                 showsVerticalScrollIndicator={false}
                             />

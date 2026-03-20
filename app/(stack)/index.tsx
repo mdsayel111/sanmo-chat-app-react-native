@@ -6,11 +6,13 @@ import PrimaryWrapper from "@/components/shared/primary-wrapper";
 import { COLORS } from "@/constants/style";
 import { useAuth } from "@/context/auth-context";
 import { useSocket } from "@/context/socket-context";
+import { useUsers } from "@/context/user-context";
 import { withAuth } from "@/HOF/auth-provider";
 import { useAuthAxios } from "@/hooks/use-auth-axios";
 import { TChat } from "@/types/chat-type";
 import { TMessage } from "@/types/message-type";
 import { TUser } from "@/types/user-type";
+import { formatChats } from "@/utils/chat";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
@@ -29,6 +31,7 @@ function HomeScreen() {
   const [searchModalVisible, setSearchModalVisible] = useState(false);
   const [chats, setChats] = useState<TChat[]>([]);
   const axios = useAuthAxios();
+  const { users } = useUsers();
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -60,17 +63,7 @@ function HomeScreen() {
     };
   }, [socket]);
 
-  const formatChats = (chats: TChat[]) => {
-    return chats.map((item: TChat) => {
-      if (item.type === "private") {
-        const otherUser = item?.members.find((member: TUser) => member._id !== auth?.user?._id) as TUser;
-        item.image = otherUser.image;
-        item.name = otherUser.name;
-      }
 
-      return item;
-    });
-  };
 
   return (
     <View style={styles.container}>
@@ -84,7 +77,7 @@ function HomeScreen() {
       />
 
       {/* Stories */}
-      <View style={styles.storyContainer}>
+      {/* <View style={styles.storyContainer}>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -99,16 +92,16 @@ function HomeScreen() {
             </View>
           )}
         />
-      </View>
+      </View> */}
 
       {/* Chat List */}
       <PrimaryWrapper>
         {
           chats.length > 0 ? (
             <FlatList
-              data={formatChats(chats)}
+              data={formatChats(chats, users, auth)}
               keyExtractor={(item) => item._id}
-              renderItem={({ item }) => <ChatRenderItem item={item} />}
+              renderItem={({ item }) => <ChatRenderItem item={item} isOnline={item.isOnline} />}
               contentContainerStyle={{ paddingBottom: 20, gap: 10 }}
               showsVerticalScrollIndicator={false}
             />
@@ -117,7 +110,7 @@ function HomeScreen() {
           )
         }
       </PrimaryWrapper>
-      <SearchModal chats={chats} setSearchModalVisible={setSearchModalVisible} searchModalVisible={searchModalVisible}  />
+      <SearchModal setSearchModalVisible={setSearchModalVisible} searchModalVisible={searchModalVisible} users={users} auth={auth} />
     </View>
   );
 }

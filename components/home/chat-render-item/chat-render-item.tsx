@@ -13,7 +13,7 @@ import {
 import SwipeableItem from "react-native-swipeable-item";
 import ChatRenderRightActions from "./components/chat-render-item-action";
 
-const ChatRenderItem = ({ item }: { item: TChat }) => {
+const ChatRenderItem = ({ item, isOnline }: { item: TChat, isOnline?: boolean }) => {
     return (
         <SwipeableItem
             item={item}
@@ -33,7 +33,7 @@ const ChatRenderItem = ({ item }: { item: TChat }) => {
                 }}
                 style={styles.chatItem}
             >
-                <Avatar uri={BASE_URL + item.image} size={45} />
+                <Avatar uri={BASE_URL + item.image} size={45} isOnline={isOnline} />
 
                 <View style={{ flex: 1, marginLeft: 12 }}>
                     <Text style={styles.name}>{item.name}</Text>

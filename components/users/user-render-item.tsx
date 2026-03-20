@@ -4,8 +4,7 @@ import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Avatar from '../shared/avatar'
 
-export default function UserRenderItem({ item, isOnline, type, id }: { item: any, isOnline?: boolean, type?: string, id?: string }) {
-    console.log(type, id)
+export default function UserRenderItem({ item, isOnline, type, id }: { item: any, isOnline?: boolean, type?: any, id?: any }) {
     return (
         <Pressable
             style={styles.row}
