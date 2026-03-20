@@ -80,13 +80,13 @@ const SettingsScreen = () => {
 
                     {/* Settings Items */}
                     <SettingItem
-                        icon="key"
+                        icon="edit"
                         title="Edit Profile"
                         subtitle="Change your name, phone number, profile picture"
                         href={"/my-profile"}
                     />
 
-                    <SettingItem
+                    {/* <SettingItem
                         icon="message-circle"
                         title="Chat"
                         subtitle="Chat history, theme, wallpapers"
@@ -96,8 +96,8 @@ const SettingsScreen = () => {
                         icon="bell"
                         title="Notifications"
                         subtitle="Messages, group and others"
-                    />
-
+                    /> */}
+                    {/* 
                     <SettingItem
                         icon="help-circle"
                         title="Help"
@@ -114,7 +114,7 @@ const SettingsScreen = () => {
                         icon="user-plus"
                         title="Invite a friend"
                         subtitle="Invite your friends to chat with you"
-                    />
+                    /> */}
                 </View>
                 <Button text="Log Out" onPress={logOut} containerStyles={{ marginBottom: 20, backgroundColor: "red" }} />
             </PrimaryWrapper>
